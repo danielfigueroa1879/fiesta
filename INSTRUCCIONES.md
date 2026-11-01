@@ -126,7 +126,8 @@ enlace no cambia en cada recarga dentro de esa ventana y el navegador reutiliza 
 La función programada `netlify/functions/borrar-fotos.mjs` corre sola **cada 15 minutos** y borra de R2
 la foto y la miniatura de cada ingreso **al terminar el evento** (hora de Chile):
 - Evento con turnos: al terminar el último turno del último día (`fecha_hasta` o `fecha_evento`).
-- Evento sin turnos / partido: a las 24:00 del último día.
+- Evento sin turnos / partido con horario: a la hora de **Término** del último día ("Hasta" = día en que termina; si no hay "Hasta" y el término pasa la medianoche, al día siguiente).
+- Evento sin turnos / partido sin horario: a las 24:00 del último día.
 - Partido cerrado y archivado: al cerrarlo.
 
 Usa las mismas variables de R2 ya configuradas en Netlify. Un evento sin fecha no se toca.
