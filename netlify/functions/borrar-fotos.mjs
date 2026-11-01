@@ -159,6 +159,13 @@ async function borrarBiometria(eventos, ahora) {
   console.log(`borrar-fotos: biometría borrada de ${plantillas.length} plantilla(s) y de los intentos de ${intentos.length} RUT`);
 }
 
+// Quita la referencia a fotos ya borradas (foto_url = null). Requiere la service_role key.
+async function limpiarRefs(ruta) {
+  const clave = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!clave) return;
+  await sbServicio(clave, ruta, { method: "PATCH", headers: { prefer: "return=minimal" }, body: JSON.stringify({ foto_url: null }) });
+}
+
 // Registro de asistencia: se ejecuta DESPUÉS del borrado de fotos (la ruta de algunas fotos de
 // partidos solo está en el historial).
 async function borrarAsistencias(eventos, ahora, historialOk) {
@@ -194,7 +201,11 @@ export default async () => {
     if (fin == null || ahora < fin + RETENCION_MS || !RE_UUID.test(ev.id)) continue;
     try {
       const claves = (await listarPrefijo(cfg, ev.id + "/")).filter(k => RE_RUTA.test(k));
-      if (claves.length) borradas += await borrarClaves(cfg, claves);
+      const n = claves.length ? await borrarClaves(cfg, claves) : 0;
+      borradas += n;
+      // Con la carpeta ya vacía en R2 se quita la referencia de la foto en la base: el panel deja de
+      // mostrar el 📷 y no pide enlaces (ni usa la copia que el navegador tenga guardada).
+      if (n === claves.length) await limpiarRefs(`asistencias?evento_id=eq.${ev.id}&foto_url=not.is.null`);
     } catch (e) { console.error("borrar-fotos evento", ev.id, e && e.message); }
   }
 
@@ -215,9 +226,16 @@ export default async () => {
       }
     }
     const carpetas = new Set([...vencidas].map(k => k.split("/")[0]));
+    let todoOk = true;
     for (const c of carpetas) {
       const claves = (await listarPrefijo(cfg, c + "/")).filter(k => vencidas.has(k));
-      if (claves.length) borradas += await borrarClaves(cfg, claves);
+      const n = claves.length ? await borrarClaves(cfg, claves) : 0;
+      borradas += n;
+      if (n !== claves.length) todoOk = false;
+    }
+    if (todoOk) for (let i = 0; i < hist.length; i += 50) {
+      const ids = hist.slice(i, i + 50).map(h => h.id).filter(id => RE_UUID.test(id));
+      if (ids.length) await limpiarRefs(`partidos_historial_asist?historial_id=in.(${ids.join(",")})&foto_url=not.is.null`);
     }
     historialOk = true;
   } catch (e) { console.error("borrar-fotos historial:", e && e.message); }
