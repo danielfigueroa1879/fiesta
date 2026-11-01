@@ -7,7 +7,10 @@
 //
 // Cuándo "termina" un evento (hora de Chile):
 //   - Evento con turnos: al terminar el último turno que empieza el último día (fecha_hasta o fecha_evento).
-//   - Evento sin turnos / partido: a las 24:00 del último día.
+//   - Evento sin turnos / partido CON horario (Inicio/Término en dotacion.horario): a la hora de término
+//     del último día ("Hasta" = día en que termina). Si no tiene "Hasta" (o es igual a "Desde") y el
+//     término es menor o igual al inicio (ej. 23:00 a 05:00), termina al día siguiente.
+//   - Evento sin turnos / partido SIN horario: a las 24:00 del último día.
 //   - Partido cerrado y archivado: al momento del cierre (cerrado_at).
 // Al llegar ese término se borran de R2 la foto y su miniatura. Un evento sin fecha no se toca.
 //
@@ -68,7 +71,14 @@ export function finEvento(ev) {
   const dia = ev && (ev.fecha_hasta || ev.fecha_evento);
   if (!dia || !/^\d{4}-\d{2}-\d{2}/.test(String(dia))) return null;
   const conTurnos = ev.tipo !== "partido" && ev.usa_turnos !== false;
-  if (!conTurnos) return instanteChile(dia, 24 * 60);
+  if (!conTurnos) {
+    const h = ev.dotacion && typeof ev.dotacion === "object" ? ev.dotacion.horario : null;
+    const hm = x => { const m = typeof x === "string" && x.match(/^(\d{2}):(\d{2})$/); return m && +m[1] <= 23 && +m[2] <= 59 ? +m[1] * 60 + +m[2] : null; };
+    const ini = h ? hm(h.inicio) : null, fin = h ? hm(h.fin) : null;
+    if (ini == null || fin == null) return instanteChile(dia, 24 * 60);
+    const unDia = !ev.fecha_hasta || !ev.fecha_evento || String(ev.fecha_hasta).slice(0, 10) <= String(ev.fecha_evento).slice(0, 10);
+    return instanteChile(dia, fin + (fin <= ini && unDia ? 24 * 60 : 0));
+  }
   let H = parseFloat(ev.turno_horas); if (!(H > 0)) H = 12; H = Math.min(24, Math.max(1, H));
   const m = String(ev.turno_inicio || "08:00").match(/^(\d{1,2}):(\d{2})/);
   const ini = m ? Math.min(23, +m[1]) * 60 + Math.min(59, +m[2]) : 8 * 60;
@@ -188,7 +198,7 @@ async function borrarAsistencias(eventos, ahora, historialOk) {
 
 export default async () => {
   const ahora = Date.now();
-  const eventos = await sbGet("eventos?select=id,tipo,usa_turnos,turno_horas,turno_inicio,fecha_evento,fecha_hasta");
+  const eventos = await sbGet("eventos?select=id,tipo,usa_turnos,turno_horas,turno_inicio,fecha_evento,fecha_hasta,dotacion");
   try { await borrarBiometria(eventos, ahora); } catch (e) { console.error("borrar-fotos biometría:", e && e.message); }
 
   const cfg = configR2();

@@ -6273,8 +6273,9 @@
       ];
     }
     // TÉRMINO DEL EVENTO (hora de Chile), igual que la función de borrado (netlify/functions/borrar-fotos.mjs):
-    // con turnos, al terminar el último turno que empieza el último día; sin turnos / partido, a las 24:00
-    // del último día. null si el evento no tiene fecha. Al llegar ese momento se borran fotos y biometría.
+    // con turnos, al terminar el último turno que empieza el último día; sin turnos / partido con horario,
+    // a la hora de término del último día ("Hasta" = día en que termina; sin "Hasta" y cruzando medianoche,
+    // al día siguiente); sin horario, a las 24:00 del último día. null si el evento no tiene fecha. Al llegar ese momento se borran fotos y biometría.
     function finEventoMs(ev) {
       const dia = ev && (ev.fecha_hasta || ev.fecha_evento);
       if (!dia || !/^\d{4}-\d{2}-\d{2}/.test(String(dia))) return null;
@@ -6285,7 +6286,14 @@
         } catch (_) { return -new Date(ms).getTimezoneOffset() * 60000; }
       };
       const enChile = minutos => { const [y, m, d] = String(dia).slice(0, 10).split("-").map(Number); const local = Date.UTC(y, m - 1, d) + minutos * 60000; return local - desfase(local - desfase(local)); };
-      if (ev.tipo === "partido" || ev.usa_turnos === false) return enChile(24 * 60);
+      if (ev.tipo === "partido" || ev.usa_turnos === false) {
+        const h = ev.dotacion && typeof ev.dotacion === "object" ? ev.dotacion.horario : null;
+        const hm = x => { const m = typeof x === "string" && x.match(/^(\d{2}):(\d{2})$/); return m && +m[1] <= 23 && +m[2] <= 59 ? +m[1] * 60 + +m[2] : null; };
+        const ini = h ? hm(h.inicio) : null, fin = h ? hm(h.fin) : null;
+        if (ini == null || fin == null) return enChile(24 * 60);
+        const unDia = !ev.fecha_hasta || !ev.fecha_evento || String(ev.fecha_hasta).slice(0, 10) <= String(ev.fecha_evento).slice(0, 10);
+        return enChile(fin + (fin <= ini && unDia ? 24 * 60 : 0));
+      }
       let H = parseFloat(ev.turno_horas); if (!(H > 0)) H = 12; H = Math.min(24, Math.max(1, H));
       const m = String(ev.turno_inicio || "08:00").match(/^(\d{1,2}):(\d{2})/);
       const ini = m ? Math.min(23, +m[1]) * 60 + Math.min(59, +m[2]) : 8 * 60;
@@ -9142,7 +9150,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
             <div>${L("Inicio del evento")}<input id="m_hini" type="text" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="HH:MM" class="fld fld-sm hora24" value="${edit && horarioEv(ev) ? esc(horarioEv(ev).inicio) : ""}"/></div>
             <div>${L("Término del evento")}<input id="m_hfin" type="text" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="HH:MM" class="fld fld-sm hora24" value="${edit && horarioEv(ev) ? esc(horarioEv(ev).fin) : ""}"/></div>
           </div>
-          <p class="text-[11px] text-slate-500 mt-1">Formato 24 h. Ej. partido: citación 12:00, inicio 14:30, término 16:30. Si termina después de medianoche (ej. 23:00 a 05:00) se entiende día siguiente. Todo es opcional.</p>
+          <p class="text-[11px] text-slate-500 mt-1">Formato 24 h. Ej. partido: citación 12:00, inicio 14:30, término 16:30. Si termina después de medianoche (ej. 23:00 a 05:00) se entiende día siguiente. Si pones fecha "Hasta", es el día en que termina. A la hora de término se borran las fotos y la biometría. Todo es opcional.</p>
         </div>
       </div>
       <label class="flex items-center gap-2 text-xs text-slate-700 select-none cursor-pointer px-1" title="El código QR cambia en cada turno (2 horas antes de su inicio) y solo sirve escaneándolo en el lugar.">
