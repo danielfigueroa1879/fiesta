@@ -940,7 +940,7 @@
       /* Botones del encabezado del evento: misma altura; los de texto mismo ancho y los de ícono cuadrados. */
       #evBanner > div:last-child { gap: .4rem; }
       #evBanner > div:last-child > .btn { height: 2.25rem; padding: 0 !important; border-radius: .75rem; box-shadow: none; }
-      #lockTopBtn, #btnCuentaTop { width: 5.75rem; font-size: .66rem !important; gap: .3rem; justify-content: center; text-align: center; overflow: hidden; text-overflow: ellipsis; }
+      #lockTopBtn { width: 5.75rem; font-size: .66rem !important; gap: .3rem; justify-content: center; text-align: center; overflow: hidden; text-overflow: ellipsis; }
       #expExcel, #expPDF, #expFotos, #compartir, #menuEv { width: 2.25rem; display: inline-flex; align-items: center; justify-content: center; }
       #expExcel, #expPDF { font-size: .68rem; }
       #compartir svg, #menuEv svg { width: 18px; height: 18px; }
@@ -995,9 +995,9 @@
       #admTotales { order: 3; flex: 1 1 100%; padding: 0; display: grid !important; grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr)); }
       #admControles { margin-left: auto; }
     }
-    /* Tablet vertical: XLS/PDF siguen en "Compartir" y la Cuenta en ☰; así el encabezado no se desborda. */
+    /* Tablet vertical: XLS/PDF siguen en "Compartir"; así el encabezado no se desborda. */
     @media (min-width: 768px) and (max-width: 1023px) {
-      #btnCuentaTop, #expExcel, #expPDF { display: none !important; }
+      #expExcel, #expPDF { display: none !important; }
       #main > .evHeaderBox > div:first-child { flex: 1 1 0; overflow: hidden; }
       #admControles { flex: 1 1 100%; min-width: 0; }
       #admControles { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -4581,7 +4581,6 @@
       </div>
       <div class="flex gap-1.5 flex-shrink-0 items-center">
         ${lockBtnHTML("lockTopBtn", "hidden md:flex")}
-        <button id="btnCuentaTop" class="btn text-xs md:text-sm px-3 py-2 text-white font-extrabold hidden md:flex items-center gap-1.5 shadow-md hover:brightness-110 rounded-xl transition-all" style="background:#25D366;border-color:#25D366" title="Informe Cuenta">Cuenta</button>
         <button id="expExcel" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar Excel"><span class="font-bold text-green-700">XLS</span></button>
         <button id="expPDF" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar PDF"><span class="font-bold text-red-600">PDF</span></button>
         ${hayFotosAdmin(asistMostrada) ? `<button id="expFotos" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="PDF o Excel con la foto de ingreso de cada guardia">📸</button>` : ""}
@@ -4649,7 +4648,6 @@
           <span class="text-xs font-semibold">${on ? (todos ? 'Activada' : `Solo ${ADMIN_STATE.bioRuts.size} RUT`) : 'Desactivada (solo foto)'}</span>
         </button>`; })() : ""}
         ${ADMIN_STATE.bioRuts && ADMIN_STATE.bioRuts.size ? `<button id="bioEnrolados" type="button" class="btn text-sm px-4 py-2.5 font-bold shadow-md rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-300" title="Guardias con verificación facial registrada (solo admin)">🧬 Enrolados</button>` : ""}
-        <button id="cuenta" class="btn text-sm px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold shadow-md rounded-xl">📋 Cuenta</button>
         <button id="expEventosXls" class="btn text-sm px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white font-bold shadow-md rounded-xl" title="Descargar todos los eventos en Excel (.xlsx) o PDF (hoja oficio horizontal)">⬇ Descargar eventos</button>
         <button id="expInfractores" class="btn text-sm px-4 py-2.5 bg-red-700 hover:bg-red-800 text-white font-bold shadow-md rounded-xl" title="Descargar en Excel el registro de todos los guardias infractores / detenidos">🚩 Infractores</button>
         <button id="revSexo" class="btn text-sm px-4 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white font-bold shadow-md rounded-xl hidden" title="Revisar y corregir el sexo (H/M) de los guardias para que el conteo sea exacto">👥 Sexo</button>
@@ -4818,8 +4816,6 @@
           } catch (e) { toast("Error al archivar: " + (e.message || e), false); }
         });
       });
-      const bC1 = $("#btnCuentaTop"); if (bC1) bC1.addEventListener("click", () => modalCuenta(ev, asistVigentes(ev, asist)));
-      const bC2 = $("#cuenta"); if (bC2) bC2.addEventListener("click", () => modalCuenta(ev, asistVigentes(ev, asist)));
       const bEvXls = $("#expEventosXls"); if (bEvXls) bEvXls.addEventListener("click", modalExportEventos);
       const bInf = $("#expInfractores"); if (bInf) bInf.addEventListener("click", modalInfractores);
       const bSexo = $("#revSexo"); if (bSexo) bSexo.addEventListener("click", modalRevisarSexo);
@@ -5254,7 +5250,7 @@
           ${grupo("Ingreso", item("toggleFotoQR", ICO.camara, "Foto de ingreso", { estado: sw("toggleFotoQR") }) + item("toggleBioQR", ICO.cara, "Biometría", { estado: sw("toggleBioQR") }) + item("bioEnrolados", ICO.usuarios, "Enrolados"))}
           ${grupo("Código QR", item("toggleQR", ICO.qr, "Ver código QR") + item("qrDl", ICO.descarga, "Descargar QR (PNG)") + item("qrPr", ICO.imprimir, "Imprimir QR") + item("qrCp", ICO.enlace, "Copiar link de ingreso"))}
           ${grupo("Evento", item("histTurnos", ICO.carpeta) + item("cerrarPartido", ICO.bandera2) + item("histPartidos", ICO.carpeta) + item("distEv", ICO.mapa, "Distribución") + item("linkEmpresa", ICO.enlace, "Link empresa") + item("linkVista", ICO.ojo, "Compartir solo vista") + item("editEv", ICO.lapiz, "Editar evento") + item("archEv", ICO.archivo))}
-          ${grupo("Informes", item("cuenta", ICO.informe, "Cuenta") + item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
+          ${grupo("Informes", item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
           ${grupo("Zona de cuidado", item("delEv", ICO.basura, "Eliminar evento", { peligro: true }))}
         </div>
       </aside>`;
@@ -8097,7 +8093,6 @@
       $("#dist_panel", ov).addEventListener("click", togglePanel);
     }
 
-    /* ---- Modal Cuenta (Informe para WhatsApp) ---- */
     // Consultar guardia en Zosepcar: ventana flotante dentro de la app.
     // - Arrastrable desde la barra de titulo (mouse y touch via pointer events).
     // - Redimensionable desde la esquina inferior derecha (CSS resize: both).
@@ -8544,506 +8539,6 @@
         console.error("verificarTodosAsistido:", err);
         try { toast("No se pudo iniciar la verificación", false); } catch (_) {}
       }
-    }
-
-    function modalCuenta(ev, asist) {
-      const isPart = esPartido(ev);
-      const saved = ev.reporte || {};
-
-      let defaultFecha = "";
-      if (ev.fecha_evento) {
-        const parts = ev.fecha_evento.split("-");
-        if (parts.length === 3) defaultFecha = `${parts[2]}.${parts[1]}.${parts[0]}`;
-      }
-      if (!defaultFecha) {
-        const d = new Date();
-        defaultFecha = `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
-      }
-
-      // Los supervisores se cuentan aparte del total de guardias.
-      const asistGuardias = (asist || []).filter(a => !a.es_supervisor);
-      const asistSupervisores = (asist || []).filter(a => a.es_supervisor);
-
-      // Conteo automático en tiempo real desde la asistencia registrada
-      const calcHombres = asistGuardias.filter(a => sexoGuardia(a.guardia) === "H").length;
-      const calcMujeres = asistGuardias.filter(a => sexoGuardia(a.guardia) === "M").length;
-      const calcSupervisores = asistSupervisores.length;
-      const calcTotalGGSS = asistGuardias.length;
-
-      const autoHombres = asistGuardias.length ? calcHombres : (saved.hombres != null ? saved.hombres : Math.round((ev.cantidad_esperada || 0) * 0.8));
-      const autoMujeres = asistGuardias.length ? calcMujeres : (saved.mujeres != null ? saved.mujeres : Math.max(0, (ev.cantidad_esperada || 0) - autoHombres));
-      const autoTotalGGSS = asistGuardias.length ? calcTotalGGSS : (saved.total_ggss != null ? saved.total_ggss : (ev.cantidad_esperada || 0));
-      const autoSupervisores = String(calcSupervisores).padStart(2, '0');
-
-      const state = {
-        fecha: saved.fecha || defaultFecha,
-        hora_inicio: saved.hora_inicio || (horarioEv(ev) ? `${horarioEv(ev).inicio} hrs.` : ev.turno_inicio ? `${ev.turno_inicio} hrs.` : "20:00 hrs."),
-        partido_o_nombre: saved.partido_o_nombre || (isPart ? (ev.partido || ev.nombre_evento) : ev.nombre_evento),
-        lugar: saved.lugar || (isPart ? "Estadio Francisco Sánchez Rumoroso, Coquimbo." : "Coquimbo."),
-
-        resolucion_num: saved.resolucion_num || "N°877",
-        resolucion_fecha: saved.resolucion_fecha || "28.08.2026",
-        resolucion_entidad: saved.resolucion_entidad || "Delegación Presidencial Regional de Coquimbo.",
-        categoria: saved.categoria || "Clase C",
-        aforo: saved.aforo || (ev.cantidad_esperada ? `${(ev.cantidad_esperada * 100).toLocaleString('es-CL')} personas.` : "10.000 personas."),
-        detec_metales: saved.detec_metales || "29 de 25.",
-        ambulancias: saved.ambulancias || "02",
-
-        empresa_nombre: saved.empresa_nombre || (isPart ? (ev.empresa ? `${ev.empresa} Sc Spa.` : "North Security Sc Spa.") : (ev.empresa || "")),
-        empresa_rut: saved.empresa_rut || "77.671.725-8",
-        ddff_num: saved.ddff_num || "N°78",
-        ddff_fecha: saved.ddff_fecha || "25.08.2026",
-
-        rep_legal_nombre: saved.rep_legal_nombre || "Sebastián Urbina Isla",
-        rep_legal_rut: saved.rep_legal_rut || "17827708-1",
-        jefe_seguridad_nombre: saved.jefe_seguridad_nombre || "Carlos Lillo Julio",
-        jefe_seguridad_rut: saved.jefe_seguridad_rut || "10592675-8",
-
-        total_ggss: autoTotalGGSS,
-        hombres: autoHombres,
-        mujeres: autoMujeres,
-        supervisores: autoSupervisores,
-        jefe_seguridad_cant: saved.jefe_seguridad_cant || "01",
-        cctv_cant: saved.cctv_cant || "01",
-
-        personal: saved.personal || "Sgto. 1ro. Daniel Figueroa Chacama.",
-        estado: saved.estado || "Sin novedad.",
-
-        // --- Datos para el formato narrativo "Cuenta al Coronel" ---
-        som_nombre: saved.som_nombre || "Luis Sáez Toledo",
-        organizador_nombre: saved.organizador_nombre || "",
-        organizador_rut: saved.organizador_rut || "",
-        coronel_venue: saved.coronel_venue || (ev.direccion || ev.nombre_evento || ""),
-        coronel_direccion: saved.coronel_direccion || [ev.direccion, ev.comuna].filter(Boolean).join(", ")
-      };
-      let formatoInforme = saved.formato || "estructurado"; // "estructurado" | "coronel"
-
-      // Observaciones (infracciones / detenciones) tomadas de la asistencia real del evento.
-      function observacionesTexto() {
-        const conObs = (asist || []).filter(a => tieneFicha(a.guardia));
-        if (!conObs.length) return "Sin Observaciones.";
-        const partes = conObs.map(a => {
-          const g = a.guardia || {};
-          const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim() || a.rut;
-          const fr = getInfracciones(g).map(r => recFrase(r)).join("; ");
-          return `${nom} (${a.rut}): ${fr}`;
-        });
-        return "Con Observaciones: " + partes.join(" / ") + ".";
-      }
-
-      function obtenerSaludoHorario() {
-        const h = new Date().getHours();
-        if (h >= 5 && h < 12) return "Buenos días";
-        if (h >= 12 && h < 20) return "Buenas tardes";
-        return "Buenas noches";
-      }
-
-      // Formato narrativo para "cuenta al Coronel" (un párrafo por evento, estilo oficio).
-      function buildTextCoronel() {
-        const nSup = parseInt(state.supervisores, 10) || 0;
-        const supTxt = nSup === 1 ? "01 Supervisor" : String(nSup).padStart(2, "0") + " Supervisores";
-        const org = (state.organizador_nombre || "").trim();
-        const orgTxt = org ? `organizado por la Empresa ${org}${state.organizador_rut ? `, RUT ${state.organizador_rut}` : ""}, que requirió los servicios de seguridad a la ` : "con servicios de seguridad de la ";
-        const venue = (state.coronel_venue || "").trim();
-        const dir = (state.coronel_direccion || "").trim();
-        const lugarTxt = venue ? `realizada en ${venue}${dir ? `, ubicado ${dir}` : ""}` : (dir ? `ubicada en ${dir}` : "");
-        const resTxt = state.ddff_num ? `, autorizado mediante Resolución ${state.ddff_num}${state.ddff_fecha ? `, de fecha ${state.ddff_fecha}` : ""}` : "";
-        const cuerpo = `${state.partido_o_nombre}${lugarTxt ? ", " + lugarTxt : ""}, ${orgTxt}Empresa de RR.HH. "${state.empresa_nombre}"${state.empresa_rut ? `, RUT ${state.empresa_rut}` : ""}${resTxt}, quienes mantienen ${state.total_ggss} GG.SS, y ${supTxt}, ${observacionesTexto()}`;
-        return `El S.O.M. ${state.som_nombre} acompañado del ${state.personal}\n\n${cuerpo}`;
-      }
-      function buildText() {
-        if (formatoInforme === "coronel") return buildTextCoronel();
-        const saludo = obtenerSaludoHorario();
-        const header = isPart
-          ? "*🏟️ INFORME ESTADIO*" 
-          : `*🎪 INFORME EVENTO: ${state.partido_o_nombre}*`;
-
-        const matchOrLocation = isPart 
-          ? `* ${state.partido_o_nombre}\n* ${state.lugar}` 
-          : `* ${state.lugar}`;
-
-        return `${saludo}, se remite el siguiente Informe:
-
-${header}
-* Fecha: ${state.fecha}
-* Hora inicio: ${state.hora_inicio}
-${matchOrLocation}
-
-*📋 DATOS ADMINISTRATIVOS*
-${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
-   de la ${state.resolucion_entidad}
-* Categoría: ${state.categoria}
-` : ``}* Aforo: ${state.aforo}
-* Detec. Metales: ${state.detec_metales}
-* Ambulancias 🚑: ${state.ambulancias}
-
-*🏢 EMPRESA SEGURIDAD*
-* ${state.empresa_nombre}
-* RUT: ${state.empresa_rut}
-* DD.FF.: ${state.ddff_num} (${state.ddff_fecha})
-
-*👥 REPRESENTANTES*
-* Representante Legal: 
-   ${state.rep_legal_nombre}
-   RUT: ${state.rep_legal_rut}
-* Jefe Seguridad: 
-   ${state.jefe_seguridad_nombre}
-   C/I: ${state.jefe_seguridad_rut}
-
-*👮‍♂️ PERSONAL DE SEGURIDAD*
-* Total GG.SS.: ${state.total_ggss}
-* Hombres: ${state.hombres}
-* Mujeres: ${state.mujeres}
-* Supervisores: ${state.supervisores}
-* Jefe de Seguridad: ${state.jefe_seguridad_cant}
-* Operador CCTV: ${state.cctv_cant}
-
-*🚔 PERSONAL*
-* ${state.personal}
-* Estado: ${state.estado}`;
-      }
-
-      openModal(`
-        <div class="space-y-3">
-          <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-1">
-            <h2 class="font-bold text-lg text-slate-800 flex items-center gap-2">
-              <span class="text-emerald-700 text-xl">📋</span> Informe Cuenta
-            </h2>
-            <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">Formato WhatsApp</span>
-          </div>
-
-          <div class="flex gap-2 mb-2">
-            <button id="cpCuenta" class="btn btn-p flex-1 py-3 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center gap-1.5 shadow-md rounded-xl transition-all">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar Cuenta al Portapapeles
-            </button>
-            <label class="btn btn-ghost flex-1 py-3 text-sm flex items-center justify-center gap-1.5 shadow-md rounded-xl cursor-pointer hover:bg-slate-50 transition-all border-dashed border-2 border-slate-300">
-              <input type="file" id="pdfUploadInput" accept="application/pdf" class="hidden" />
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-              <span id="pdfUploadLabel">Autocompletar PDF</span>
-            </label>
-          </div>
-
-          <div class="flex gap-2 mb-2">
-            <button type="button" id="fmt_estructurado" class="btn flex-1 py-2 text-xs font-bold rounded-xl">Estructurado</button>
-            <button type="button" id="fmt_coronel" class="btn flex-1 py-2 text-xs font-bold rounded-xl">Cuenta al Coronel</button>
-          </div>
-
-          <div class="relative">
-            <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1 flex justify-between items-center">
-              <span>Vista previa del mensaje</span>
-              <span class="text-emerald-600 font-bold text-xs">Listo para pegar en WhatsApp</span>
-            </div>
-            <textarea id="cuentaPreview" class="w-full bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono whitespace-pre-wrap border border-emerald-500/30 shadow-inner h-56 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" readonly></textarea>
-          </div>
-
-          <details class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs" open>
-            <summary class="font-bold text-slate-700 cursor-pointer text-xs mb-2 select-none flex items-center justify-between">
-              <span>✎ Editar datos del informe (Resolución, Empresa, Representantes, Personal)</span>
-              <span class="text-slate-400 font-normal text-[11px]">Desplegar/ocultar</span>
-            </summary>
-            
-            <div class="space-y-2.5 pt-2 border-t border-slate-200">
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700">🏟️ / 🎪 Datos del Evento</div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Fecha</label><input id="r_fecha" class="fld text-xs py-1" value="${esc(state.fecha)}"/></div>
-                <div><label class="font-medium text-slate-600">Hora inicio</label><input id="r_hora" class="fld text-xs py-1" value="${esc(state.hora_inicio)}"/></div>
-              </div>
-              <div><label class="font-medium text-slate-600">${isPart ? "Partido / Equipos" : "Nombre del Evento"}</label><input id="r_partido" class="fld text-xs py-1" value="${esc(state.partido_o_nombre)}"/></div>
-              <div><label class="font-medium text-slate-600">Lugar / Estadio</label><input id="r_lugar" class="fld text-xs py-1" value="${esc(state.lugar)}"/></div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">📋 Datos Administrativos${isPart ? " (Resolución siempre editable)" : " <span class='font-normal text-slate-400'>(sin resolución: este evento no es partido)</span>"}</div>
-              ${isPart ? `<div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Resolución N°</label><input id="r_res_num" class="fld text-xs py-1" value="${esc(state.resolucion_num)}"/></div>
-                <div><label class="font-medium text-slate-600">Fecha Res.</label><input id="r_res_fecha" class="fld text-xs py-1" value="${esc(state.resolucion_fecha)}"/></div>
-              </div>
-              <div><label class="font-medium text-slate-600">Entidad Emisora</label><input id="r_res_entidad" class="fld text-xs py-1" value="${esc(state.resolucion_entidad)}"/></div>` : ""}
-              <div class="grid grid-cols-2 gap-2">
-                ${isPart ? `<div><label class="font-medium text-slate-600">Categoría</label><input id="r_cat" class="fld text-xs py-1" value="${esc(state.categoria)}"/></div>` : ""}
-                <div><label class="font-medium text-slate-600">Aforo</label><input id="r_aforo" class="fld text-xs py-1" value="${esc(state.aforo)}"/></div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Detec. Metales</label><input id="r_metales" class="fld text-xs py-1" value="${esc(state.detec_metales)}"/></div>
-                <div><label class="font-medium text-slate-600">Ambulancias 🚑</label><input id="r_amb" class="fld text-xs py-1" value="${esc(state.ambulancias)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🏢 Empresa de Seguridad</div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Nombre Empresa</label><input id="r_emp_nom" class="fld text-xs py-1" value="${esc(state.empresa_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">RUT Empresa</label><input id="r_emp_rut" class="fld text-xs py-1" value="${esc(state.empresa_rut)}"/></div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">DD.FF. N° <span class="font-normal text-slate-400">(Directiva de Funcionamiento)</span></label><input id="r_ddff_num" class="fld text-xs py-1" value="${esc(state.ddff_num)}"/></div>
-                <div><label class="font-medium text-slate-600">Fecha DD.FF.</label><input id="r_ddff_fecha" class="fld text-xs py-1" value="${esc(state.ddff_fecha)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">👥 Representantes</div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Rep. Legal</label><input id="r_rep_nom" class="fld text-xs py-1" value="${esc(state.rep_legal_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">RUT Rep. Legal</label><input id="r_rep_rut" class="fld text-xs py-1" value="${esc(state.rep_legal_rut)}"/></div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Jefe Seguridad</label><input id="r_jefe_nom" class="fld text-xs py-1" value="${esc(state.jefe_seguridad_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">C/I Jefe Seg.</label><input id="r_jefe_rut" class="fld text-xs py-1" value="${esc(state.jefe_seguridad_rut)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">${guardiaIcon()} Personal de Seguridad</div>
-              <div class="grid grid-cols-3 gap-2">
-                <div><label class="font-medium text-slate-600">Total GG.SS.</label><input id="r_total_ggss" type="number" class="fld text-xs py-1" value="${state.total_ggss}"/></div>
-                <div><label class="font-medium text-slate-600">Hombres</label><input id="r_hombres" type="number" class="fld text-xs py-1" value="${state.hombres}"/></div>
-                <div><label class="font-medium text-slate-600">Mujeres</label><input id="r_mujeres" type="number" class="fld text-xs py-1" value="${state.mujeres}"/></div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div><label class="font-medium text-slate-600">Supervisores</label><input id="r_supervisores" class="fld text-xs py-1" value="${esc(state.supervisores)}"/></div>
-                <div><label class="font-medium text-slate-600">Jefe Seg. (Cant)</label><input id="r_jefe_cant" class="fld text-xs py-1" value="${esc(state.jefe_seguridad_cant)}"/></div>
-                <div><label class="font-medium text-slate-600">CCTV (Cant)</label><input id="r_cctv_cant" class="fld text-xs py-1" value="${esc(state.cctv_cant)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🚔 Personal</div>
-              <div><label class="font-medium text-slate-600">Personal a Cargo</label><input id="r_personal" class="fld text-xs py-1" value="${esc(state.personal)}"/></div>
-              <div><label class="font-medium text-slate-600">Estado del Evento</label><input id="r_estado" class="fld text-xs py-1" value="${esc(state.estado)}"/></div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🎖️ Cuenta al Coronel <span class="font-normal text-slate-400">(formato narrativo)</span></div>
-              <div><label class="font-medium text-slate-600">S.O.M. a cargo</label><input id="r_som" class="fld text-xs py-1" value="${esc(state.som_nombre)}"/></div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Organizador (Empresa)</label><input id="r_org_nom" class="fld text-xs py-1" value="${esc(state.organizador_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">RUT Organizador</label><input id="r_org_rut" class="fld text-xs py-1" value="${esc(state.organizador_rut)}"/></div>
-              </div>
-              <div><label class="font-medium text-slate-600">Realizada en (recinto)</label><input id="r_venue" class="fld text-xs py-1" value="${esc(state.coronel_venue)}"/></div>
-              <div><label class="font-medium text-slate-600">Dirección</label><input id="r_direccion" class="fld text-xs py-1" value="${esc(state.coronel_direccion)}"/></div>
-            </div>
-          </details>
-
-          <div class="flex gap-2 pt-1">
-            <button id="m_close_report" class="btn btn-ghost flex-1">Cerrar</button>
-            <button id="m_save_report" class="btn btn-p flex-1 bg-slate-700 hover:bg-slate-800 text-white">💾 Guardar plantilla</button>
-          </div>
-        </div>
-      `);
-
-      const prev = $("#cuentaPreview");
-      const updatePreview = () => {
-        state.fecha = $("#r_fecha").value.trim();
-        state.hora_inicio = $("#r_hora").value.trim();
-        state.partido_o_nombre = $("#r_partido").value.trim();
-        state.lugar = $("#r_lugar").value.trim();
-
-        const _resNum = $("#r_res_num"); if (_resNum) state.resolucion_num = _resNum.value.trim();
-        const _resFecha = $("#r_res_fecha"); if (_resFecha) state.resolucion_fecha = _resFecha.value.trim();
-        const _resEnt = $("#r_res_entidad"); if (_resEnt) state.resolucion_entidad = _resEnt.value.trim();
-        const _cat = $("#r_cat"); if (_cat) state.categoria = _cat.value.trim();
-        state.aforo = $("#r_aforo").value.trim();
-        state.detec_metales = $("#r_metales").value.trim();
-        state.ambulancias = $("#r_amb").value.trim();
-
-        state.empresa_nombre = $("#r_emp_nom").value.trim();
-        state.empresa_rut = $("#r_emp_rut").value.trim();
-        state.ddff_num = $("#r_ddff_num").value.trim();
-        state.ddff_fecha = $("#r_ddff_fecha").value.trim();
-
-        state.rep_legal_nombre = $("#r_rep_nom").value.trim();
-        state.rep_legal_rut = $("#r_rep_rut").value.trim();
-        state.jefe_seguridad_nombre = $("#r_jefe_nom").value.trim();
-        state.jefe_seguridad_rut = $("#r_jefe_rut").value.trim();
-
-        state.total_ggss = $("#r_total_ggss").value;
-        state.hombres = $("#r_hombres").value;
-        state.mujeres = $("#r_mujeres").value;
-        state.supervisores = $("#r_supervisores").value.trim();
-        state.jefe_seguridad_cant = $("#r_jefe_cant").value.trim();
-        state.cctv_cant = $("#r_cctv_cant").value.trim();
-
-        state.personal = $("#r_personal").value.trim();
-        state.estado = $("#r_estado").value.trim();
-
-        { const e = $("#r_som"); if (e) state.som_nombre = e.value.trim(); }
-        { const e = $("#r_org_nom"); if (e) state.organizador_nombre = e.value.trim(); }
-        { const e = $("#r_org_rut"); if (e) state.organizador_rut = e.value.trim(); }
-        { const e = $("#r_venue"); if (e) state.coronel_venue = e.value.trim(); }
-        { const e = $("#r_direccion"); if (e) state.coronel_direccion = e.value.trim(); }
-        state.formato = formatoInforme;
-
-        prev.value = buildText();
-      };
-
-      // Botones para alternar el formato del informe (estructurado / narrativo al Coronel).
-      const pintarToggle = () => {
-        const bE = $("#fmt_estructurado"), bC = $("#fmt_coronel");
-        const on = "bg-emerald-600 text-white", off = "btn-ghost";
-        if (bE) bE.className = "btn flex-1 py-2 text-xs font-bold rounded-xl " + (formatoInforme === "coronel" ? off : on);
-        if (bC) bC.className = "btn flex-1 py-2 text-xs font-bold rounded-xl " + (formatoInforme === "coronel" ? on : off);
-      };
-      { const bE = $("#fmt_estructurado"), bC = $("#fmt_coronel");
-        if (bE) bE.addEventListener("click", () => { formatoInforme = "estructurado"; pintarToggle(); updatePreview(); });
-        if (bC) bC.addEventListener("click", () => { formatoInforme = "coronel"; pintarToggle(); updatePreview(); });
-      }
-      pintarToggle();
-
-      prev.value = buildText();
-
-      const inputs = [
-        "r_fecha", "r_hora", "r_partido", "r_lugar", "r_res_num", "r_res_fecha", "r_res_entidad",
-        "r_cat", "r_aforo", "r_metales", "r_amb", "r_emp_nom", "r_emp_rut", "r_ddff_num", "r_ddff_fecha",
-        "r_rep_nom", "r_rep_rut", "r_jefe_nom", "r_jefe_rut", "r_total_ggss", "r_hombres", "r_mujeres",
-        "r_supervisores", "r_jefe_cant", "r_cctv_cant", "r_personal", "r_estado",
-        "r_som", "r_org_nom", "r_org_rut", "r_venue", "r_direccion"
-      ];
-      inputs.forEach(id => {
-        const el = $("#" + id);
-        if (el) el.addEventListener("input", updatePreview);
-      });
-
-      const guardarEstado = async () => {
-        updatePreview();
-        try {
-          await Data.updateEvento(ev.id, { reporte: state });
-        } catch (e) { console.error("Error guardando plantilla de informe:", e); }
-      };
-
-      // --- INICIO: Lógica para Autocompletar con PDF ---
-      const pdfInput = $("#pdfUploadInput");
-      if (pdfInput) {
-        pdfInput.addEventListener("change", async (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-
-          const label = $("#pdfUploadLabel");
-          const originalLabelText = label.innerText;
-          label.innerText = "Procesando...";
-
-          try {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-            let fullText = "";
-
-            for (let i = 1; i <= pdf.numPages; i++) {
-              const page = await pdf.getPage(i);
-              const textContent = await page.getTextContent();
-              const pageText = textContent.items.map(item => item.str).join(" ");
-              fullText += pageText + " ";
-            }
-
-            // Normalizar el texto (quitar multiples espacios)
-            const text = fullText.replace(/\s+/g, ' ');
-
-            // Helper para convertir fecha larga a corta (DD/MM/YYYY)
-            function toShortDate(str) {
-              if (!str) return "";
-              const m = { 'enero': '01', 'febrero': '02', 'marzo': '03', 'abril': '04', 'mayo': '05', 'junio': '06', 'julio': '07', 'agosto': '08', 'septiembre': '09', 'octubre': '10', 'noviembre': '11', 'diciembre': '12' };
-              const regex = /(\d{1,2})\s*de\s*([a-zA-Z]+)\s*de\s*(\d{4})/i;
-              const match = str.match(regex);
-              if (match) {
-                const day = match[1].padStart(2, '0');
-                const month = m[match[2].toLowerCase()] || '01';
-                return `${day}/${month}/${match[3]}`;
-              }
-              return str;
-            }
-
-            // --- EXTRACCIÓN CON REGEX ---
-            const resMatch = text.match(/RESOLUCIÓN EXENTA N°\s*(\d+)/i);
-            if (resMatch && $("#r_res_num")) $("#r_res_num").value = resMatch[1].trim();
-
-            const fechaResMatch = text.match(/LA SERENA,?\s*(\d{1,2} de [a-zA-Z]+ de \d{4})/i) || text.match(/(\d{1,2} de [a-zA-Z]+ de \d{4})/i);
-            if (fechaResMatch && $("#r_res_fecha")) $("#r_res_fecha").value = toShortDate(fechaResMatch[1].trim());
-
-            // Detalles del evento (equipos, fecha, hora, lugar)
-            const eventoDetailsMatch = text.match(/equipos\s+([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?)\s*,\s*el d[ií]a\s+([a-zA-Z]+\s+\d{1,2}\s+de\s+[a-zA-Z]+\s+de\s+\d{4})\s+a las\s+(\d{1,2}[:.]\d{2})\s+horas.*?(?:en el\s+)?(Estadio\s+[A-Za-z\s]+)(?:.|\,)/i);
-            
-            if (eventoDetailsMatch) {
-              let equipos = eventoDetailsMatch[1].trim();
-              if (equipos.toLowerCase().includes("y")) {
-                equipos = equipos.replace(/\by\b/gi, "vs");
-              }
-              $("#r_partido").value = equipos;
-              $("#r_fecha").value = toShortDate(eventoDetailsMatch[2].trim());
-              $("#r_hora").value = eventoDetailsMatch[3].replace('.', ':').trim() + " hrs";
-              let lugar = eventoDetailsMatch[4].trim();
-              if (lugar.toLowerCase().includes("portada")) {
-                lugar = "Estadio La Portada La Serena";
-              } else if (lugar.toLowerCase().includes("sanchez") || lugar.toLowerCase().includes("sánchez") || lugar.toLowerCase().includes("rumoroso")) {
-                lugar = "Estadio Francisco Sanchez Rumoroso";
-              }
-              $("#r_lugar").value = lugar;
-            } else {
-              // Fallbacks genéricos para cualquier equipo
-              const partidoMatch = text.match(/Autoriza partido.*?indica\s+([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?\s+v\/s\s+[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?)RESOLUCIÓN/i) || text.match(/([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?\s+v\/s\s+[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?)(?:,|$|el d[ií]a)/i);
-              if (partidoMatch) {
-                let eq = partidoMatch[1].trim();
-                $("#r_partido").value = eq;
-              }
-
-              const fechaMatch = text.match(/el d[ií]a\s*([a-zA-Z]+\s*\d{1,2}\s*de\s*[a-zA-Z]+\s*de\s*\d{4})/i);
-              if (fechaMatch) $("#r_fecha").value = toShortDate(fechaMatch[1].trim());
-
-              const horaMatch = text.match(/a las\s*(\d{1,2}[:.]\d{2})\s*horas/i);
-              if (horaMatch) $("#r_hora").value = horaMatch[1].replace('.', ':').trim() + " hrs";
-
-              const lugarMatch = text.match(/(Estadio\s+[A-Za-z\s]+)(?:.|\,)/i);
-              if (lugarMatch) {
-                let lugar = lugarMatch[1].trim();
-                if (lugar.toLowerCase().includes("portada")) lugar = "Estadio La Portada La Serena";
-                else if (lugar.toLowerCase().includes("sanchez") || lugar.toLowerCase().includes("sánchez") || lugar.toLowerCase().includes("rumoroso")) lugar = "Estadio Francisco Sanchez Rumoroso";
-                $("#r_lugar").value = lugar;
-              }
-            }
-
-            const catMatch = text.match(/Categoría\s*([A-Z])/i);
-            if (catMatch && $("#r_cat")) $("#r_cat").value = "Cat. " + catMatch[1];
-
-            const aforoMatch = text.match(/aforo autorizado.*?es de\s*([0-9.]+)\s*personas/i);
-            if (aforoMatch) $("#r_aforo").value = aforoMatch[1] + " personas";
-
-            const ambMatch = text.match(/([0-9]+)\s*ambulancia/i);
-            if (ambMatch) $("#r_amb").value = ambMatch[1];
-
-            const metalesMatch = text.match(/([0-9]+)\s*detectores de metales/i);
-            if (metalesMatch) $("#r_metales").value = metalesMatch[1];
-
-            const jefeMatch = text.match(/Jefe de Seguridad.*?a don\s*([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+),?\s*RUN\s*N°\s*([0-9.-]+)/i);
-            if (jefeMatch) {
-              $("#r_jefe_nom").value = jefeMatch[1].trim();
-              $("#r_jefe_rut").value = jefeMatch[2].trim();
-            }
-
-            updatePreview();
-            toast("¡Datos del PDF extraídos exitosamente!", true);
-          } catch (err) {
-            console.error("Error al procesar el PDF:", err);
-            toast("Error al leer el PDF. Asegúrate de que sea un archivo válido.", false);
-          } finally {
-            label.innerText = "¡Completado!";
-            setTimeout(() => { label.innerText = originalLabelText; }, 3000);
-            pdfInput.value = "";
-          }
-        });
-      }
-      // --- FIN: Lógica para Autocompletar con PDF ---
-
-      $("#m_close_report").addEventListener("click", closeModal);
-      $("#m_save_report").addEventListener("click", async () => {
-        await guardarEstado();
-        toast("Plantilla de informe guardada para este evento.");
-      });
-
-      $("#cpCuenta").addEventListener("click", async () => {
-        updatePreview();
-        const textToCopy = prev.value;
-        try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(textToCopy);
-          } else {
-            prev.select();
-            document.execCommand("copy");
-          }
-          await guardarEstado();
-          toast("¡Informe Cuenta copiado al portapapeles! Listo para pegar en WhatsApp.", true, 4000);
-        } catch (err) {
-          prev.select();
-          document.execCommand("copy");
-          toast("¡Informe copiado al portapapeles!", true);
-        }
-      });
     }
 
     /* ---- Modales evento ---- */

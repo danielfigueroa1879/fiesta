@@ -51,14 +51,6 @@ alter table eventos add column if not exists comuna    text;
 alter table eventos add column if not exists dotacion jsonb default '{}'::jsonb;
 -- QR rotativo por turno (true/false lo fuerza; null = según si el evento usa turnos).
 alter table eventos add column if not exists qr_rotativo boolean;
--- Datos guardados de la "Cuenta" (informe para WhatsApp) de cada evento.
-do $$ begin
-  if exists (select 1 from information_schema.columns where table_name = 'eventos' and column_name = 'reporte_os10')
-     and not exists (select 1 from information_schema.columns where table_name = 'eventos' and column_name = 'reporte') then
-    alter table eventos rename column reporte_os10 to reporte;
-  end if;
-end $$;
-alter table eventos add column if not exists reporte jsonb;
 
 create table if not exists guardias_central (
   rut                 text primary key,          -- formateado: 12345678-9
