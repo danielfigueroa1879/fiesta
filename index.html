@@ -57,9 +57,9 @@
   <script>
     (function () {
       try {
-        var t1 = "%c⛔ SISTEMA PROTEGIDO — O.S.10 Coquimbo";
+        var t1 = "%c⛔ SISTEMA PROTEGIDO";
         var s1 = "color:#fff;background:#b91c1c;font-size:20px;font-weight:bold;padding:8px 14px;border-radius:6px";
-        var t2 = "%cEste sistema es de uso exclusivo de fiscalización O.S.10.\nEstá PROHIBIDO modificar, copiar, redistribuir o manipular su código o sus datos.\nEl acceso y las acciones quedan registrados. La intervención no autorizada puede\nconstituir delito conforme a la Ley N° 21.459 (delitos informáticos) y demás normativa vigente.";
+        var t2 = "%cEste sistema es de uso exclusivo de fiscalización.\nEstá PROHIBIDO modificar, copiar, redistribuir o manipular su código o sus datos.\nEl acceso y las acciones quedan registrados. La intervención no autorizada puede\nconstituir delito conforme a la Ley N° 21.459 (delitos informáticos) y demás normativa vigente.";
         var s2 = "color:#b91c1c;font-size:13px;font-weight:600;line-height:1.5";
         var mostrar = function () { try { console.log(t1, s1); console.log(t2, s2); } catch (e) {} };
         mostrar();
@@ -994,7 +994,7 @@
       #admTotales { order: 3; flex: 1 1 100%; padding: 0; display: grid !important; grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr)); }
       #admControles { margin-left: auto; }
     }
-    /* Tablet vertical: XLS/PDF siguen en "Compartir" y la Cuenta O.S.10 en ☰; así el encabezado no se desborda. */
+    /* Tablet vertical: XLS/PDF siguen en "Compartir" y la Cuenta en ☰; así el encabezado no se desborda. */
     @media (min-width: 768px) and (max-width: 1023px) {
       #btnCuentaOS10Top, #expExcel, #expPDF { display: none !important; }
       #main > .evHeaderBox > div:first-child { flex: 1 1 0; overflow: hidden; }
@@ -2939,7 +2939,7 @@
     }
     /* ---- MARCA DE AGUA sobre la foto de ingreso ----
        No impide capturar la pantalla (ninguna web puede), pero deja toda copia
-       IDENTIFICADA (O.S.10 + RUT + fecha), lo que disuade y permite rastrear filtraciones.
+       IDENTIFICADA (RUT + fecha), lo que disuade y permite rastrear filtraciones.
        Se superpone en pantalla, para fotos/capturas de pantalla (la foto no se puede descargar). */
     function _marcaTextoFoto(a, nombre) {
       var rut = (a && a.rut) ? String(a.rut) : "";
@@ -3775,7 +3775,6 @@
       <div id="sbBrand" class="brand-bg text-white h-16 px-4 md:h-auto md:pl-3 md:pr-8 md:py-2.5 flex items-center gap-3 md:gap-2 relative">
         <div class="flex-1">
           <div class="font-bold text-lg md:text-[14px] md:whitespace-nowrap leading-tight">CONTROL EVENTOS</div>
-          <div class="text-xs md:text-[11px] opacity-80">O.S.10 Coquimbo</div>
         </div>
         <button id="cerrarMenu" class="md:hidden text-white text-2xl leading-none px-1" aria-label="Cerrar menú">✕</button>
         <button id="sbOcultar" type="button" class="sbToggle" title="Angostar / ampliar panel" aria-label="Angostar o ampliar panel"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><line x1="9" y1="4" x2="9" y2="20"/></svg></button>
@@ -4567,7 +4566,7 @@
       </div>
       <div class="flex gap-1.5 flex-shrink-0 items-center">
         ${lockBtnHTML("lockTopBtn", "hidden md:flex")}
-        <button id="btnCuentaOS10Top" class="btn text-xs md:text-sm px-3 py-2 text-white font-extrabold hidden md:flex items-center gap-1.5 shadow-md hover:brightness-110 rounded-xl transition-all" style="background:#25D366;border-color:#25D366" title="Informe Cuenta O.S.10">Cuenta O.S.10</button>
+        <button id="btnCuentaOS10Top" class="btn text-xs md:text-sm px-3 py-2 text-white font-extrabold hidden md:flex items-center gap-1.5 shadow-md hover:brightness-110 rounded-xl transition-all" style="background:#25D366;border-color:#25D366" title="Informe Cuenta">Cuenta</button>
         <button id="expExcel" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar Excel"><span class="font-bold text-green-700">XLS</span></button>
         <button id="expPDF" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar PDF"><span class="font-bold text-red-600">PDF</span></button>
         ${hayFotosAdmin(asistMostrada) ? `<button id="expFotos" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="PDF o Excel con la foto de ingreso de cada guardia">📸</button>` : ""}
@@ -4635,7 +4634,7 @@
           <span class="text-xs font-semibold">${on ? (todos ? 'Activada' : `Solo ${ADMIN_STATE.bioRuts.size} RUT`) : 'Desactivada (solo foto)'}</span>
         </button>`; })() : ""}
         ${ADMIN_STATE.bioRuts && ADMIN_STATE.bioRuts.size ? `<button id="bioEnrolados" type="button" class="btn text-sm px-4 py-2.5 font-bold shadow-md rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-300" title="Guardias con verificación facial registrada (solo admin)">🧬 Enrolados</button>` : ""}
-        <button id="cuentaOS10" class="btn text-sm px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold shadow-md rounded-xl">📋 Cuenta O.S.10</button>
+        <button id="cuentaOS10" class="btn text-sm px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold shadow-md rounded-xl">📋 Cuenta</button>
         <button id="expEventosXls" class="btn text-sm px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white font-bold shadow-md rounded-xl" title="Descargar todos los eventos en Excel (.xlsx) o PDF (hoja oficio horizontal)">⬇ Descargar eventos</button>
         <button id="expInfractores" class="btn text-sm px-4 py-2.5 bg-red-700 hover:bg-red-800 text-white font-bold shadow-md rounded-xl" title="Descargar en Excel el registro de todos los guardias infractores / detenidos">🚩 Infractores</button>
         <button id="revSexo" class="btn text-sm px-4 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white font-bold shadow-md rounded-xl hidden" title="Revisar y corregir el sexo (H/M) de los guardias para que el conteo sea exacto">👥 Sexo</button>
@@ -4761,7 +4760,7 @@
       $("#admQrFondo").addEventListener("click", () => qrAbrir(false));
       if (!window._admQrEsc) { window._admQrEsc = true; document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("admQrFondo") && ADMIN_STATE.showQR) { const b = document.getElementById("admQrCerrarBtn"); if (b) b.click(); } }); }
 
-      // QR (con logo O.S.10 al centro y margen blanco)
+      // QR (con logo al centro y margen blanco)
       if (ADMIN_STATE.showQR) montarQR($("#qrbox"), ev);   // si no, se dibuja al abrirlo (ahorra tiempo en cada repintado)
       if ($("#qrDl")) $("#qrDl").addEventListener("click", () => dlQR(ev));
       if ($("#qrPr")) $("#qrPr").addEventListener("click", () => prQR(ev));
@@ -5016,7 +5015,7 @@
             <div class="flex items-end gap-1 overflow-x-auto pb-1" style="height:${CH + 30}px">${barrasHora}</div>
           </div>
           <div class="lg:col-span-2">
-            <div class="text-sm font-medium text-slate-600 mb-2">Estado de vigencia (O.S.10)</div>
+            <div class="text-sm font-medium text-slate-600 mb-2">Estado de vigencia</div>
             ${barrasVig}
           </div>
         </div>
@@ -5240,7 +5239,7 @@
           ${grupo("Ingreso", item("toggleFotoQR", ICO.camara, "Foto de ingreso", { estado: sw("toggleFotoQR") }) + item("toggleBioQR", ICO.cara, "Biometría", { estado: sw("toggleBioQR") }) + item("bioEnrolados", ICO.usuarios, "Enrolados"))}
           ${grupo("Código QR", item("toggleQR", ICO.qr, "Ver código QR") + item("qrDl", ICO.descarga, "Descargar QR (PNG)") + item("qrPr", ICO.imprimir, "Imprimir QR") + item("qrCp", ICO.enlace, "Copiar link de ingreso"))}
           ${grupo("Evento", item("histTurnos", ICO.carpeta) + item("cerrarPartido", ICO.bandera2) + item("histPartidos", ICO.carpeta) + item("distEv", ICO.mapa, "Distribución") + item("linkEmpresa", ICO.enlace, "Link empresa") + item("linkVista", ICO.ojo, "Compartir solo vista") + item("editEv", ICO.lapiz, "Editar evento") + item("archEv", ICO.archivo))}
-          ${grupo("Informes", item("cuentaOS10", ICO.informe, "Cuenta O.S.10") + item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
+          ${grupo("Informes", item("cuentaOS10", ICO.informe, "Cuenta") + item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
           ${grupo("Zona de cuidado", item("delEv", ICO.basura, "Eliminar evento", { peligro: true }))}
         </div>
       </aside>`;
@@ -5816,7 +5815,7 @@
       }
     }
 
-    /* ---- QR con logo O.S.10 + margen blanco ---- */
+    /* ---- QR con logo + margen blanco ---- */
     function renderQRConLogo(container, text) {
       const SIZE = 150;      // módulo del QR (unidades lógicas)
       const MARGIN = 7;      // margen blanco (quiet zone) discreto
@@ -6128,7 +6127,7 @@
         const _norm = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
         const eventos = (ADMIN_STATE.eventos || []).filter(e => !esPartido(e) && !_norm(e.nombre_evento).includes("teleton"));
         if (!eventos.length) {
-          openModal(`<div><h2 class="font-bold text-slate-800 mb-2">Resumen Fiestas Patrias O.S.10 Coquimbo</h2><p class="text-slate-500 text-sm">No hay eventos para resumir (los partidos de estadio quedan excluidos).</p><button id="rfp_close" class="btn btn-ghost w-full mt-4">Cerrar</button></div>`);
+          openModal(`<div><h2 class="font-bold text-slate-800 mb-2">Resumen Fiestas Patrias</h2><p class="text-slate-500 text-sm">No hay eventos para resumir (los partidos de estadio quedan excluidos).</p><button id="rfp_close" class="btn btn-ghost w-full mt-4">Cerrar</button></div>`);
           const b = $("#rfp_close"); if (b) b.addEventListener("click", closeModal);
           return;
         }
@@ -6170,7 +6169,7 @@
         }).join("");
         openModal(`
       <div class="flex items-center justify-between mb-3">
-        <h2 class="font-bold text-slate-800 text-base">Resumen Fiestas Patrias O.S.10 Coquimbo</h2>
+        <h2 class="font-bold text-slate-800 text-base">Resumen Fiestas Patrias</h2>
         <button id="rfp_x" class="text-slate-400 hover:text-slate-700 text-xl leading-none">✕</button>
       </div>
       <p class="text-xs text-slate-500 mb-3">Guardias y supervisores controlados. Total por día: cada ingreso cuenta.</p>
@@ -6636,7 +6635,7 @@
         didDrawPage: () => {
           const H = doc.internal.pageSize.getHeight();
           doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-          doc.text("O.S.10 Coquimbo · Sistema de control de guardias", W / 2, H - 18, { align: "center" });
+          doc.text("Sistema de control de guardias", W / 2, H - 18, { align: "center" });
           doc.text("Pág. " + doc.internal.getNumberOfPages(), W - 28, H - 18, { align: "right" });
         }
       });
@@ -6726,7 +6725,7 @@
         <div class="sub">Total: <b>${asistG.length}</b>${ev.cantidad_esperada ? " / " + esc(ev.cantidad_esperada) : ""} guardias${asistS.length ? " · <b>" + asistS.length + "</b> supervisor" + (asistS.length === 1 ? "" : "es") : ""} · <b>${contarHM(asistG).h}</b> H · <b>${contarHM(asistG).m}</b> M · Generado ${esc(new Date().toLocaleString("es-CL", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false, hourCycle: "h23" }))}</div>
         <table><thead><tr>${th}</tr></thead><tbody>${tr || `<tr><td colspan="${cols.length}">Sin guardias registrados.</td></tr>`}</tbody></table>
         ${bloqueSup}
-        <div class="foot">Prefectura O.S.10 Coquimbo · Documento generado desde el sistema de control de guardias.</div>
+        <div class="foot">Documento generado desde el sistema de control de guardias.</div>
         <script>window.onload=()=>{window.print()}<\/script>
       </body></html>`;
     }
@@ -6802,7 +6801,7 @@
         didDrawPage: () => {
           const H = doc.internal.pageSize.getHeight();
           doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-          doc.text("O.S.10 Coquimbo · Sistema de control de guardias", W / 2, H - 18, { align: "center" });
+          doc.text("Sistema de control de guardias", W / 2, H - 18, { align: "center" });
           doc.text("Pág. " + doc.internal.getNumberOfPages(), W - 28, H - 18, { align: "right" });
         }
       });
@@ -7886,7 +7885,7 @@
             margin: { left: marginX, right: marginX, bottom: 34 },
             didDrawPage: () => {
               doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-              doc.text("O.S.10 Coquimbo · Distribución de facciones", W / 2, H - 16, { align: "center" });
+              doc.text("Distribución de facciones", W / 2, H - 16, { align: "center" });
               doc.text("Pág. " + doc.internal.getNumberOfPages(), W - marginX, H - 16, { align: "right" });
             }
           });
@@ -8083,7 +8082,7 @@
       $("#dist_panel", ov).addEventListener("click", togglePanel);
     }
 
-    /* ---- Modal Cuenta O.S.10 (Informe para WhatsApp) ---- */
+    /* ---- Modal Cuenta (Informe para WhatsApp) ---- */
     // Consultar guardia en Zosepcar: ventana flotante dentro de la app.
     // - Arrastrable desde la barra de titulo (mouse y touch via pointer events).
     // - Redimensionable desde la esquina inferior derecha (CSS resize: both).
@@ -8629,7 +8628,7 @@
         const nSup = parseInt(state.supervisores, 10) || 0;
         const supTxt = nSup === 1 ? "01 Supervisor" : String(nSup).padStart(2, "0") + " Supervisores";
         const org = (state.organizador_nombre || "").trim();
-        const orgTxt = org ? `organizado por la Empresa ${org}${state.organizador_rut ? `, RUT ${state.organizador_rut}` : ""}, que requirió los servicios de Seguridad Privada a la ` : "con servicios de Seguridad Privada de la ";
+        const orgTxt = org ? `organizado por la Empresa ${org}${state.organizador_rut ? `, RUT ${state.organizador_rut}` : ""}, que requirió los servicios de seguridad a la ` : "con servicios de seguridad de la ";
         const venue = (state.coronel_venue || "").trim();
         const dir = (state.coronel_direccion || "").trim();
         const lugarTxt = venue ? `realizada en ${venue}${dir ? `, ubicado ${dir}` : ""}` : (dir ? `ubicada en ${dir}` : "");
@@ -8648,7 +8647,7 @@
           ? `* ${state.partido_o_nombre}\n* ${state.lugar}` 
           : `* ${state.lugar}`;
 
-        return `${saludo}, OS10 Coquimbo remite el siguiente Informe:
+        return `${saludo}, se remite el siguiente Informe:
 
 ${header}
 * Fecha: ${state.fecha}
@@ -8684,7 +8683,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
 * Jefe de Seguridad: ${state.jefe_seguridad_cant}
 * Operador CCTV: ${state.cctv_cant}
 
-*🚔 PERSONAL OS.10*
+*🚔 PERSONAL*
 * ${state.personal_os10}
 * Estado: ${state.estado}`;
       }
@@ -8693,7 +8692,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
         <div class="space-y-3">
           <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-1">
             <h2 class="font-bold text-lg text-slate-800 flex items-center gap-2">
-              <span class="text-emerald-700 text-xl">📋</span> Informe Cuenta O.S.10
+              <span class="text-emerald-700 text-xl">📋</span> Informe Cuenta
             </h2>
             <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">Formato WhatsApp</span>
           </div>
@@ -8785,8 +8784,8 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
                 <div><label class="font-medium text-slate-600">CCTV (Cant)</label><input id="r_cctv_cant" class="fld text-xs py-1" value="${esc(state.cctv_cant)}"/></div>
               </div>
 
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🚔 Personal OS.10</div>
-              <div><label class="font-medium text-slate-600">Personal OS.10 a Cargo</label><input id="r_os10" class="fld text-xs py-1" value="${esc(state.personal_os10)}"/></div>
+              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🚔 Personal</div>
+              <div><label class="font-medium text-slate-600">Personal a Cargo</label><input id="r_os10" class="fld text-xs py-1" value="${esc(state.personal_os10)}"/></div>
               <div><label class="font-medium text-slate-600">Estado del Evento</label><input id="r_estado" class="fld text-xs py-1" value="${esc(state.estado)}"/></div>
 
               <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🎖️ Cuenta al Coronel <span class="font-normal text-slate-400">(formato narrativo)</span></div>
@@ -9023,7 +9022,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
             document.execCommand("copy");
           }
           await guardarEstado();
-          toast("¡Informe Cuenta O.S.10 copiado al portapapeles! Listo para pegar en WhatsApp.", true, 4000);
+          toast("¡Informe Cuenta copiado al portapapeles! Listo para pegar en WhatsApp.", true, 4000);
         } catch (err) {
           prev.select();
           document.execCommand("copy");
@@ -9765,7 +9764,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
           </table>
         </div>
       </div>
-      <p class="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-2"><img src="images/logo-os10-original.webp" class="w-5 h-5 opacity-60" alt="">O.S.10 Coquimbo · Vista de solo lectura</p>
+      <p class="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-2"><img src="images/logo-os10-original.webp" class="w-5 h-5 opacity-60" alt="">Vista de solo lectura</p>
     </div>`;
         // Paneles plegables con auto-repliegue a los 7 s (igual que el "Resumen" del admin).
         const autoRepliegue = (btnId, panelId, chevId, key) => {

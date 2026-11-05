@@ -1,7 +1,7 @@
 {
-  "name": "Control de Guardias — O.S.10 Coquimbo",
+  "name": "Control de Guardias",
   "short_name": "Guardias OS10",
-  "description": "Control y fiscalización de guardias de seguridad privada · O.S.10 Coquimbo.",
+  "description": "Control y fiscalización de guardias.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
