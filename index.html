@@ -15,7 +15,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Control de Guardias — Eventos OS10</title>
+  <title>Control de Guardias — Eventos</title>
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="192x192" href="images/icon-app-192.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -23,7 +23,7 @@
   <meta name="theme-color" content="#0f5323">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Guardias OS10">
+  <meta name="apple-mobile-web-app-title" content="Guardias">
   <!-- Preconexión a los CDNs para acelerar la descarga de librerías -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -52,7 +52,8 @@
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" /></noscript>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script>try { if (localStorage.getItem('os10_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) { }</script>
+  <script>try { for (var i = localStorage.length - 1; i >= 0; i--) { var k = localStorage.key(i); if (k && k.indexOf('os10_') === 0) { var n = 'ce_' + k.slice(5); if (localStorage.getItem(n) === null) localStorage.setItem(n, localStorage.getItem(k)); localStorage.removeItem(k); } } } catch (e) { }</script>
+  <script>try { if (localStorage.getItem('ce_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) { }</script>
   <!-- Aviso disuasivo en la consola del desarrollador (no bloquea DevTools; deja constancia del uso prohibido). -->
   <script>
     (function () {
@@ -114,8 +115,8 @@
           (function () { debugger; })();   // no-op si DevTools está cerrado; pausa si está abierto
         }, 120);
         // Por si el administrador NECESITA inspeccionar su propio sistema sin estorbo:
-        // en la consola puede escribir  window.__os10DevOff()  para desactivar la trampa.
-        window.__os10DevOff = function () { activo = false; return "Trampa anti-inspección desactivada."; };
+        // en la consola puede escribir  window.__devOff()  para desactivar la trampa.
+        window.__devOff = function () { activo = false; return "Trampa anti-inspección desactivada."; };
       } catch (e) {}
     })();
   </script>
@@ -939,7 +940,7 @@
       /* Botones del encabezado del evento: misma altura; los de texto mismo ancho y los de ícono cuadrados. */
       #evBanner > div:last-child { gap: .4rem; }
       #evBanner > div:last-child > .btn { height: 2.25rem; padding: 0 !important; border-radius: .75rem; box-shadow: none; }
-      #lockTopBtn, #btnCuentaOS10Top { width: 5.75rem; font-size: .66rem !important; gap: .3rem; justify-content: center; text-align: center; overflow: hidden; text-overflow: ellipsis; }
+      #lockTopBtn, #btnCuentaTop { width: 5.75rem; font-size: .66rem !important; gap: .3rem; justify-content: center; text-align: center; overflow: hidden; text-overflow: ellipsis; }
       #expExcel, #expPDF, #expFotos, #compartir, #menuEv { width: 2.25rem; display: inline-flex; align-items: center; justify-content: center; }
       #expExcel, #expPDF { font-size: .68rem; }
       #compartir svg, #menuEv svg { width: 18px; height: 18px; }
@@ -996,7 +997,7 @@
     }
     /* Tablet vertical: XLS/PDF siguen en "Compartir" y la Cuenta en ☰; así el encabezado no se desborda. */
     @media (min-width: 768px) and (max-width: 1023px) {
-      #btnCuentaOS10Top, #expExcel, #expPDF { display: none !important; }
+      #btnCuentaTop, #expExcel, #expPDF { display: none !important; }
       #main > .evHeaderBox > div:first-child { flex: 1 1 0; overflow: hidden; }
       #admControles { flex: 1 1 100%; min-width: 0; }
       #admControles { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1427,7 +1428,7 @@
     //    y las claves reales viven hasheadas en la tabla 'secretos' (ver SQL de instalación).
     //    Para cambiarlas, actualiza la tabla 'secretos' en Supabase, NO este archivo.
 
-    // 3) Reglas legales OS10 (Ley 21.659 / prórroga Ley 21.825). No suelen cambiar.
+    // 3) Reglas legales (Ley 21.659 / prórroga Ley 21.825). No suelen cambiar.
     const MESES_VIGENCIA = 36;
     const ENTRADA_VIGENCIA_LEY = new Date(2025, 10, 28);        // 28-nov-2025 (entrada en vigor)
     const FECHA_TOPE_PRORROGA = new Date(2027, 4, 28, 23, 59, 59); // 28-may-2027 (tope prórroga)
@@ -1435,7 +1436,7 @@
     const USING_SUPABASE = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
     const APP_VERSION = "v3.3";
     // En modo Supabase, limpiar datos de demo viejos guardados en el navegador (evita confusiones/cachés).
-    if (USING_SUPABASE) { try { ["os10_eventos", "os10_guardias", "os10_asistencias", "os10_seeded"].forEach(k => localStorage.removeItem(k)); } catch (e) { } }
+    if (USING_SUPABASE) { try { ["ce_eventos", "ce_guardias", "ce_asistencias", "ce_seeded"].forEach(k => localStorage.removeItem(k)); } catch (e) { } }
 
     /* =========================================================================
        LÓGICA DE VIGENCIA
@@ -1856,7 +1857,7 @@
 
     /* ---- Adaptador LocalStorage (DEMO) ---- */
     const Local = (() => {
-      const K = { ev: "os10_eventos", gu: "os10_guardias", as: "os10_asistencias", hp: "os10_hist_partidos", hpa: "os10_hist_asist", pu: "os10_puestos" };
+      const K = { ev: "ce_eventos", gu: "ce_guardias", as: "ce_asistencias", hp: "ce_hist_partidos", hpa: "ce_hist_asist", pu: "ce_puestos" };
       const get = (k) => { try { return JSON.parse(localStorage.getItem(k) || "[]") } catch { return [] } };
       const set = (k, v) => { localStorage.setItem(k, JSON.stringify(v)); };
       let listeners = [];
@@ -1916,8 +1917,8 @@
         async deletePuesto(id) { set(K.pu, get(K.pu).filter(x => x.id !== id)); set(K.as, get(K.as).map(x => x.puesto_id === id ? { ...x, puesto_id: null } : x)); ping(); },
         async asignarPuesto(asistenciaId, puestoId) { set(K.as, get(K.as).map(x => x.id === asistenciaId ? { ...x, puesto_id: puestoId } : x)); ping(); },
         // Configuración global (demo: en este dispositivo). Ej: clave "foto_ingreso" = "1"/"0".
-        async getConfig(clave) { try { const c = JSON.parse(localStorage.getItem("os10_config") || "{}"); return clave in c ? c[clave] : null; } catch { return null; } },
-        async setConfig(clave, valor) { let c = {}; try { c = JSON.parse(localStorage.getItem("os10_config") || "{}"); } catch {} c[clave] = valor; localStorage.setItem("os10_config", JSON.stringify(c)); ping(); },
+        async getConfig(clave) { try { const c = JSON.parse(localStorage.getItem("ce_config") || "{}"); return clave in c ? c[clave] : null; } catch { return null; } },
+        async setConfig(clave, valor) { let c = {}; try { c = JSON.parse(localStorage.getItem("ce_config") || "{}"); } catch {} c[clave] = valor; localStorage.setItem("ce_config", JSON.stringify(c)); ping(); },
         // Foto de verificación (demo): se guarda como data URL WebP dentro de la asistencia.
         async subirFotoIngreso(evId, asisId, blob) { const url = await blobToDataURL(blob); const a = get(K.as); const r = a.find(x => x.id === asisId); if (r) { r.foto_url = url; set(K.as, a); ping(); } return url; },
         // Retención de fotos (demo): borra las fotos con más de N días (asistencias e historial).
@@ -1978,7 +1979,7 @@
       let canal = null, conectadoAntes = false, ocultaTimer = null;
       const conectarRT = () => {
         if (canal || !listeners.length) return;
-        canal = sb.channel("os10-rt")
+        canal = sb.channel("eventos-rt")
         .on("postgres_changes", { event: "*", schema: "public" }, (pl) => {
           // La ficha de un guardia que cambió en otro equipo se actualiza en la caché con la fila que llega.
           // Lo que cambió en otro equipo deja de servir en la memoria corta (se vuelve a pedir).
@@ -2047,7 +2048,7 @@
       const FOTOS_API = "/.netlify/functions/fotos";
       const esR2 = p => String(p || "").startsWith("r2:");
       const fotosR2 = new Set();   // ids de asistencias cuya foto está en R2
-      const R2_LS = "os10_r2firmas";
+      const R2_LS = "ce_r2firmas";
       try { const g = JSON.parse(localStorage.getItem(R2_LS) || "{}"), t = Date.now(); Object.entries(g).forEach(([k, v]) => { if (v && v.url && v.vence - t > FIRMA_MARGEN_MS) firmas.set(k, v); }); } catch (e) { }
       const guardarFirmasR2 = () => { try { const t = Date.now(), o = {}; firmas.forEach((v, k) => { if (esR2(k) && v.url && v.vence > t) o[k] = v; }); localStorage.setItem(R2_LS, JSON.stringify(o)); } catch (e) { } };
       async function apiFotos(cuerpo) {
@@ -2102,7 +2103,7 @@
       const rutaFotoAsis = (evId, asisId) => (fotosR2.has(asisId) ? "r2:" : "") + `${evId}/${asisId}.webp`;
       // Borrar en R2 exige el PIN de administrador (lo comprueba la función en el servidor). Se
       // guarda solo en esta pestaña al entrar al panel; sin él no se intenta (no gasta llamadas).
-      const pinAdmin = () => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } };
+      const pinAdmin = () => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } };
       // Borra fotos (y sus miniaturas) donde estén: R2 (vía la función) o Supabase Storage.
       // Devuelve el Set de rutas (tal como se pasaron) que NO se pudieron borrar, para no olvidar
       // su referencia y reintentar en la próxima limpieza.
@@ -2151,7 +2152,7 @@
       // BORRADOS PENDIENTES: fotos (o carpetas de eventos) que no se pudieron borrar al quitar un
       // guardia, borrar un historial o eliminar un evento. Se guardan en este equipo y se
       // reintentan en la limpieza automática del panel, así no quedan archivos huérfanos.
-      const PEND_LS = "os10_fotos_pend";
+      const PEND_LS = "ce_fotos_pend";
       const leerPendientes = () => { try { const a = JSON.parse(localStorage.getItem(PEND_LS) || "[]"); return Array.isArray(a) ? a : []; } catch (_) { return []; } };
       const guardarPendientes = a => { try { if (a.length) localStorage.setItem(PEND_LS, JSON.stringify(a.slice(-2000))); else localStorage.removeItem(PEND_LS); } catch (_) { } };
       function anotarPendientes(rutas) { const r = [...rutas].filter(Boolean); if (r.length) guardarPendientes([...new Set([...leerPendientes(), ...r])]); }
@@ -2468,7 +2469,7 @@
     function applyTheme(dark) {
       if (dark) document.documentElement.setAttribute("data-theme", "dark");
       else document.documentElement.removeAttribute("data-theme");
-      try { localStorage.setItem("os10_theme", dark ? "dark" : "light"); } catch (e) { }
+      try { localStorage.setItem("ce_theme", dark ? "dark" : "light"); } catch (e) { }
     }
     // HTML del botón día/noche (se inserta junto al nombre del evento).
     function themeBtnHTML(id) { return `<button id="${id}" type="button" class="themeBtn" title="Cambiar modo día/noche">${isDarkTheme() ? "Noche" : "Día"}</button>`; }
@@ -2778,7 +2779,7 @@
         <div style="background:#fff;border-radius:22px;padding:26px 22px;width:100%;max-width:330px;text-align:center;box-shadow:0 20px 50px -12px rgba(0,0,0,.45)">
           <div style="position:relative;width:86px;height:86px;margin:0 auto 14px">
             <div style="position:absolute;inset:0;border-radius:50%;border:6px solid #dcfce7;border-top-color:#16a34a;animation:procGiro .8s linear infinite"></div>
-            <img src="images/logo-os10-original.webp" alt="" style="position:absolute;inset:12px;width:62px;height:62px;border-radius:50%;animation:procLatido 1.6s ease-in-out infinite">
+            <img src="images/logo-original.webp" alt="" style="position:absolute;inset:12px;width:62px;height:62px;border-radius:50%;animation:procLatido 1.6s ease-in-out infinite">
           </div>
           <div style="font-weight:800;font-size:18px;color:#0f172a">Procesando tu ingreso</div>
           <div style="font-size:12px;color:#64748b;margin-top:2px">No cierres esta pantalla</div>
@@ -3313,7 +3314,7 @@
               <div id="g_telMsg" class="text-[11px] mt-0.5"></div>
             </div>
             <div>
-              <label id="g_fechaLabel" class="text-sm font-semibold text-slate-700">Fecha último examen OS10</label>
+              <label id="g_fechaLabel" class="text-sm font-semibold text-slate-700">Fecha último examen</label>
               <input id="g_fecha" type="date" class="fld"/>
               <div id="g_fecMsg" class="text-[11px] mt-0.5"></div>
             </div>
@@ -3344,7 +3345,7 @@
         </div>` : ""}
       </div>
 
-      <p class="text-center text-xs text-slate-400 mt-4">Sistema de fiscalización OS10 · ${USING_SUPABASE ? '' : 'MODO DEMO'}</p>
+      <p class="text-center text-xs text-slate-400 mt-4">Sistema de fiscalización · ${USING_SUPABASE ? '' : 'MODO DEMO'}</p>
     </div>
   </div>`;
 
@@ -3405,14 +3406,14 @@
       tel.addEventListener("blur", () => { telTocado = true; if (avisoTel()) sacudirTel(); });
       fecha.addEventListener("change", () => { if (fecha.value && fechaFutura(fecha.value)) { avisoFecha(); vigBox.hidden = true; } else { avisoFecha(); mostrarVigencia(fecha.value); } actualizarBtn(); });
 
-      // El supervisor no da examen OS10: su vigencia (3 años) nace de la fecha de autorización de la resolución.
+      // El supervisor no da examen: su vigencia (3 años) nace de la fecha de autorización de la resolución.
       // Al elegir Supervisor en el desplegable, cambian los rótulos del formulario para reflejarlo.
       const fechaLabel = $("#g_fechaLabel"), vigBoxLabel = $("#vigBoxLabel");
       function aplicarRotuloSupervisor() {
         const esSup = !!(superSel && superSel.value === "supervisor");
-        if (fechaLabel) fechaLabel.textContent = esSup ? "Fecha de autorización de la resolución" : "Fecha último examen OS10";
+        if (fechaLabel) fechaLabel.textContent = esSup ? "Fecha de autorización de la resolución" : "Fecha último examen";
         if (vigBoxLabel) vigBoxLabel.textContent = esSup ? "Estado de la autorización" : "Estado del curso";
-        // Los supervisores NO llevan vigencia OS10 (prórroga / sin prórroga): se oculta el recuadro de estado.
+        // Los supervisores NO llevan vigencia (prórroga / sin prórroga): se oculta el recuadro de estado.
         if (esSup) vigBox.hidden = true; else mostrarVigencia(fecha.value);
       }
       if (superSel) superSel.addEventListener("change", aplicarRotuloSupervisor);
@@ -3707,7 +3708,7 @@
        PANEL ADMIN — gate por PIN
        ========================================================================= */
     function renderAdminGate() {
-      if (sessionStorage.getItem("os10_admin") === "1") return renderAdmin();
+      if (sessionStorage.getItem("ce_admin") === "1") return renderAdmin();
       app.innerHTML = `<div class="min-h-screen flex items-center justify-center p-6">
     <div class="card p-6 w-full max-w-sm text-center">
       <h1 class="font-bold text-lg text-slate-800">Panel de Control de Guardias</h1>
@@ -3721,7 +3722,7 @@
         if (btn) { btn.disabled = true; btn.textContent = "Verificando…"; }
         try {
           const ok = await Data.verificarClave("admin", inp ? inp.value : "");
-          if (ok) { sessionStorage.setItem("os10_admin", "1"); try { sessionStorage.setItem("os10_admin_pin", inp ? inp.value : ""); } catch (_) { } renderAdmin(); return; }
+          if (ok) { sessionStorage.setItem("ce_admin", "1"); try { sessionStorage.setItem("ce_admin_pin", inp ? inp.value : ""); } catch (_) { } renderAdmin(); return; }
           toast("PIN incorrecto", false);
         } catch (e) {
           toast("No se pudo verificar (sin conexión). Intenta nuevamente.", "danger", 4000);
@@ -3762,7 +3763,7 @@
     <!-- Topbar móvil -->
     <div class="md:hidden brand-bg text-white flex items-center justify-between px-4 h-16">
       <button id="hamb" class="w-9 h-9 -ml-1 flex items-center justify-center" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button>
-      <div class="font-bold text-lg flex items-center gap-2"><img src="images/logo-os10-original.webp" class="hidden w-8 h-8 rounded-full bg-white/90" alt="OS10"><!-- logo oculto por ahora; quitar "hidden" para mostrarlo -->CONTROL EVENTOS</div>
+      <div class="font-bold text-lg flex items-center gap-2"><img src="images/logo-original.webp" class="hidden w-8 h-8 rounded-full bg-white/90" alt=""><!-- logo oculto por ahora; quitar "hidden" para mostrarlo -->CONTROL EVENTOS</div>
       <!-- Opciones del evento abierto (mismo panel ☰ de PC). Invisible si no hay evento seleccionado. -->
       <button id="menuEvTop" type="button" class="w-9 h-9 -mr-1 flex items-center justify-center invisible" aria-label="Opciones del evento" title="Opciones del evento"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
@@ -3844,10 +3845,10 @@
       });
       $("#jplBtn").addEventListener("click", () => { if (window.innerWidth < 768 && window.cerrarDrawer) window.cerrarDrawer(); modalJuzgadoTurno(); });
       $("#importar").addEventListener("click", () => { if (window.innerWidth < 768 && window.cerrarDrawer) window.cerrarDrawer(); modalImportar(); });
-      $("#salir").addEventListener("click", () => { sessionStorage.removeItem("os10_admin"); sessionStorage.removeItem("os10_admin_pin"); route(); });
+      $("#salir").addEventListener("click", () => { sessionStorage.removeItem("ce_admin"); sessionStorage.removeItem("ce_admin_pin"); route(); });
       // PC: angostar / ampliar el panel lateral con el botón de la franja verde. Se recuerda en este equipo.
-      const pintarSb = angosto => { document.body.classList.toggle("sb-angosto", angosto); try { localStorage.setItem("os10_sb_angosto", angosto ? "1" : "0"); } catch (_) {} };
-      let sbAngosto = false; try { sbAngosto = localStorage.getItem("os10_sb_angosto") === "1"; } catch (_) {}
+      const pintarSb = angosto => { document.body.classList.toggle("sb-angosto", angosto); try { localStorage.setItem("ce_sb_angosto", angosto ? "1" : "0"); } catch (_) {} };
+      let sbAngosto = false; try { sbAngosto = localStorage.getItem("ce_sb_angosto") === "1"; } catch (_) {}
       pintarSb(sbAngosto);
       $("#sbOcultar").addEventListener("click", () => pintarSb(!document.body.classList.contains("sb-angosto")));
       const hamb = $("#hamb"), sidebar = $("#sidebar"), drawerBk = $("#drawerBk"), cerrarMenu = $("#cerrarMenu");
@@ -3866,9 +3867,9 @@
       [ADMIN_STATE.fotoIngreso, ADMIN_STATE.bioRuts] = await Promise.all([cargarFotoIngresoConfig(), leerBioRuts()]);
       // RETENCIÓN de fotos: al entrar al panel se borran las fotos con más de FOTO_RETENCION_DIAS días (máx. 1 vez cada 6 h por dispositivo).
       try {
-        const ultimaPurga = +(localStorage.getItem("os10_purga_fotos") || 0);
+        const ultimaPurga = +(localStorage.getItem("ce_purga_fotos") || 0);
         if (Date.now() - ultimaPurga > 6 * 3600 * 1000) {
-          localStorage.setItem("os10_purga_fotos", String(Date.now()));
+          localStorage.setItem("ce_purga_fotos", String(Date.now()));
           Data.purgarFotosAntiguas(FOTO_RETENCION_DIAS).then(n => { if (n) console.log(`Fotos de ingreso borradas por antigüedad (>${FOTO_RETENCION_DIAS} días):`, n); }).catch(() => {});
           purgarBiometria();   // intentos con más de 60 días y plantillas sin uso en 60 días (en el servidor)
         }
@@ -4349,13 +4350,13 @@
       if (g && g.spd_verificado) return true;
       return !!(ev && spdVisto(ev.id, a.rut));
     }
-    // ¿El examen OS10 es de este año (año en curso)?
+    // ¿El examen es de este año (año en curso)?
     function examenEsteAno(fechaStr) {
       const d = parseFecha(fechaStr);
       return !!d && d.getFullYear() === new Date().getFullYear();
     }
     // ¿El guardia requiere autorización / resolución SPD? Sí cuando el administrador lo marcó
-    // manualmente (g.spd) o, AUTOMÁTICAMENTE, cuando su examen OS10 es de este año: una
+    // manualmente (g.spd) o, AUTOMÁTICAMENTE, cuando su examen es de este año: una
     // autorización reciente debe estar respaldada por la resolución de la SPD. Los supervisores
     // no se auto-marcan (solo aplica el marcado manual).
     function esSPD(g, a) {
@@ -4527,7 +4528,7 @@
       const nX = filas.filter(a => calcularVigencia(a.guardia?.fecha_ultimo_examen).estado === "VENCIDO_SIN_PRORROGA").length;
       const nS = filas.filter(a => calcularVigencia(a.guardia?.fecha_ultimo_examen).estado === "SIN_CURSO").length;
       const nSup = filasSup.length;
-      // Los supervisores no llevan vigencia OS10, por lo que no se cuentan en prórrogas ni vencidos.
+      // Los supervisores no llevan vigencia, por lo que no se cuentan en prórrogas ni vencidos.
       const totalProrrogas = nP;
       const totalVencidos = nX;
       // Conteo aproximado de hombres/mujeres por primer nombre (ver generoDeNombre).
@@ -4566,7 +4567,7 @@
       </div>
       <div class="flex gap-1.5 flex-shrink-0 items-center">
         ${lockBtnHTML("lockTopBtn", "hidden md:flex")}
-        <button id="btnCuentaOS10Top" class="btn text-xs md:text-sm px-3 py-2 text-white font-extrabold hidden md:flex items-center gap-1.5 shadow-md hover:brightness-110 rounded-xl transition-all" style="background:#25D366;border-color:#25D366" title="Informe Cuenta">Cuenta</button>
+        <button id="btnCuentaTop" class="btn text-xs md:text-sm px-3 py-2 text-white font-extrabold hidden md:flex items-center gap-1.5 shadow-md hover:brightness-110 rounded-xl transition-all" style="background:#25D366;border-color:#25D366" title="Informe Cuenta">Cuenta</button>
         <button id="expExcel" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar Excel"><span class="font-bold text-green-700">XLS</span></button>
         <button id="expPDF" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar PDF"><span class="font-bold text-red-600">PDF</span></button>
         ${hayFotosAdmin(asistMostrada) ? `<button id="expFotos" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="PDF o Excel con la foto de ingreso de cada guardia">📸</button>` : ""}
@@ -4634,7 +4635,7 @@
           <span class="text-xs font-semibold">${on ? (todos ? 'Activada' : `Solo ${ADMIN_STATE.bioRuts.size} RUT`) : 'Desactivada (solo foto)'}</span>
         </button>`; })() : ""}
         ${ADMIN_STATE.bioRuts && ADMIN_STATE.bioRuts.size ? `<button id="bioEnrolados" type="button" class="btn text-sm px-4 py-2.5 font-bold shadow-md rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-300" title="Guardias con verificación facial registrada (solo admin)">🧬 Enrolados</button>` : ""}
-        <button id="cuentaOS10" class="btn text-sm px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold shadow-md rounded-xl">📋 Cuenta</button>
+        <button id="cuenta" class="btn text-sm px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold shadow-md rounded-xl">📋 Cuenta</button>
         <button id="expEventosXls" class="btn text-sm px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white font-bold shadow-md rounded-xl" title="Descargar todos los eventos en Excel (.xlsx) o PDF (hoja oficio horizontal)">⬇ Descargar eventos</button>
         <button id="expInfractores" class="btn text-sm px-4 py-2.5 bg-red-700 hover:bg-red-800 text-white font-bold shadow-md rounded-xl" title="Descargar en Excel el registro de todos los guardias infractores / detenidos">🚩 Infractores</button>
         <button id="revSexo" class="btn text-sm px-4 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white font-bold shadow-md rounded-xl hidden" title="Revisar y corregir el sexo (H/M) de los guardias para que el conteo sea exacto">👥 Sexo</button>
@@ -4803,8 +4804,8 @@
           } catch (e) { toast("Error al archivar: " + (e.message || e), false); }
         });
       });
-      const bC1 = $("#btnCuentaOS10Top"); if (bC1) bC1.addEventListener("click", () => modalCuentaOS10(ev, asistVigentes(ev, asist)));
-      const bC2 = $("#cuentaOS10"); if (bC2) bC2.addEventListener("click", () => modalCuentaOS10(ev, asistVigentes(ev, asist)));
+      const bC1 = $("#btnCuentaTop"); if (bC1) bC1.addEventListener("click", () => modalCuenta(ev, asistVigentes(ev, asist)));
+      const bC2 = $("#cuenta"); if (bC2) bC2.addEventListener("click", () => modalCuenta(ev, asistVigentes(ev, asist)));
       const bEvXls = $("#expEventosXls"); if (bEvXls) bEvXls.addEventListener("click", modalExportEventos);
       const bInf = $("#expInfractores"); if (bInf) bInf.addEventListener("click", modalInfractores);
       const bSexo = $("#revSexo"); if (bSexo) bSexo.addEventListener("click", modalRevisarSexo);
@@ -4957,7 +4958,7 @@
       asist.forEach(a => { const d = new Date(a.hora_ingreso); if (!isNaN(d.getTime())) horas[d.getHours()].count++; });
       const maxHora = Math.max(1, ...horas.map(h => h.count));
 
-      // --- Estado de vigencia (solo guardias: los supervisores no llevan vigencia OS10) ---
+      // --- Estado de vigencia (solo guardias: los supervisores no llevan vigencia) ---
       const asistVig = asist.filter(a => !a.es_supervisor);
       const vig = { VIGENTE: 0, VENCIDO_CON_PRORROGA: 0, VENCIDO_SIN_PRORROGA: 0, SIN_CURSO: 0 };
       asistVig.forEach(a => { const e = calcularVigencia(a.guardia?.fecha_ultimo_examen).estado; if (e in vig) vig[e]++; });
@@ -5061,10 +5062,10 @@
           e.stopPropagation();
           if (!pedirPin) { toast("Biometría: " + txt, false, 5000); return; }
           const v = prompt("Biometría: ingresa el PIN de administrador para ver los resultados");
-          if (v) { try { sessionStorage.setItem("os10_admin_pin", v); } catch (_) { } if (ADMIN_STATE._bio) ADMIN_STATE._bio.t = 0; pintarBioPiloto(root); }
+          if (v) { try { sessionStorage.setItem("ce_admin_pin", v); } catch (_) { } if (ADMIN_STATE._bio) ADMIN_STATE._bio.t = 0; pintarBioPiloto(root); }
         };
       });
-      const pin = (() => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } })();
+      const pin = (() => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } })();
       if (!pin) { aviso("falta el PIN en esta pestaña (clic para ingresarlo)", true); return; }
       const memo = ADMIN_STATE._bio || (ADMIN_STATE._bio = { t: 0, r: {} });
       const ids = [...new Set(marcas.map(m => m.dataset.bio))];
@@ -5076,7 +5077,7 @@
           const resp = await fetch("/.netlify/functions/biometria", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "resultados", pin, asistencia_ids: ids }) });
           if (!resp.ok) {
             const err = (await resp.json().catch(() => ({}))).error || ("HTTP " + resp.status);
-            if (resp.status === 401) { try { sessionStorage.removeItem("os10_admin_pin"); } catch (_) { } aviso("PIN incorrecto (clic para ingresarlo)", true); }
+            if (resp.status === 401) { try { sessionStorage.removeItem("ce_admin_pin"); } catch (_) { } aviso("PIN incorrecto (clic para ingresarlo)", true); }
             else aviso("no se pudo consultar: " + err, false);
             return;
           }
@@ -5239,7 +5240,7 @@
           ${grupo("Ingreso", item("toggleFotoQR", ICO.camara, "Foto de ingreso", { estado: sw("toggleFotoQR") }) + item("toggleBioQR", ICO.cara, "Biometría", { estado: sw("toggleBioQR") }) + item("bioEnrolados", ICO.usuarios, "Enrolados"))}
           ${grupo("Código QR", item("toggleQR", ICO.qr, "Ver código QR") + item("qrDl", ICO.descarga, "Descargar QR (PNG)") + item("qrPr", ICO.imprimir, "Imprimir QR") + item("qrCp", ICO.enlace, "Copiar link de ingreso"))}
           ${grupo("Evento", item("histTurnos", ICO.carpeta) + item("cerrarPartido", ICO.bandera2) + item("histPartidos", ICO.carpeta) + item("distEv", ICO.mapa, "Distribución") + item("linkEmpresa", ICO.enlace, "Link empresa") + item("linkVista", ICO.ojo, "Compartir solo vista") + item("editEv", ICO.lapiz, "Editar evento") + item("archEv", ICO.archivo))}
-          ${grupo("Informes", item("cuentaOS10", ICO.informe, "Cuenta") + item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
+          ${grupo("Informes", item("cuenta", ICO.informe, "Cuenta") + item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
           ${grupo("Zona de cuidado", item("delEv", ICO.basura, "Eliminar evento", { peligro: true }))}
         </div>
       </aside>`;
@@ -5292,19 +5293,19 @@
     // abrir la ventana (una llamada a la función + nombres desde la caché de guardias).
     // Período del panel de enrolados: "" = últimos 7 días, o una fecha "AAAA-MM-DD" (desde esa fecha, hora local).
     // Se recuerda en esta pestaña para no tener que elegirlo cada vez.
-    const enrDesdeGuardado = () => { try { return sessionStorage.getItem("os10_enr_desde") || ""; } catch (_) { return ""; } };
+    const enrDesdeGuardado = () => { try { return sessionStorage.getItem("ce_enr_desde") || ""; } catch (_) { return ""; } };
     async function modalEnrolados(desde) {
       desde = /^\d{4}-\d{2}-\d{2}$/.test(desde || "") ? desde : "";
-      try { sessionStorage.setItem("os10_enr_desde", desde); } catch (_) { }
+      try { sessionStorage.setItem("ce_enr_desde", desde); } catch (_) { }
       const desdeIso = desde ? new Date(+desde.slice(0, 4), +desde.slice(5, 7) - 1, +desde.slice(8, 10)).toISOString() : "";
-      let pin = (() => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } })();
-      if (!pin) { pin = prompt("Biometría: ingresa el PIN de administrador") || ""; if (!pin) return; try { sessionStorage.setItem("os10_admin_pin", pin); } catch (_) { } }
+      let pin = (() => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } })();
+      if (!pin) { pin = prompt("Biometría: ingresa el PIN de administrador") || ""; if (!pin) return; try { sessionStorage.setItem("ce_admin_pin", pin); } catch (_) { } }
       openModal(`<div class="text-center text-slate-500 py-6">🧬 Cargando enrolados…</div>`);
       let d;
       try {
         const r = await fetch("/.netlify/functions/biometria", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "resumen", pin, ...(desdeIso ? { desde: desdeIso } : {}) }) });
         d = await r.json().catch(() => ({}));
-        if (r.status === 401) { try { sessionStorage.removeItem("os10_admin_pin"); } catch (_) { } closeModal(); toast("PIN incorrecto.", "danger", 4000); return; }
+        if (r.status === 401) { try { sessionStorage.removeItem("ce_admin_pin"); } catch (_) { } closeModal(); toast("PIN incorrecto.", "danger", 4000); return; }
         if (!r.ok) throw new Error(d.error || ("HTTP " + r.status));
       } catch (e) { closeModal(); toast("No se pudo consultar: " + (e.message || e), "danger", 5000); return; }
       const lista = d.lista || [];
@@ -5407,7 +5408,7 @@
     }
     // RETENCIÓN BIOMÉTRICA (60 días): la función borra los intentos con más de 60 días y las plantillas de
     // guardias sin ingresos en 60 días. Requiere el PIN de esta pestaña; si falla, se reintenta la próxima vez.
-    function purgarBioPin() { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } }
+    function purgarBioPin() { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } }
     async function purgarBiometria() {
       const pin = purgarBioPin(); if (!pin || !USING_SUPABASE) return;
       try {
@@ -5427,7 +5428,7 @@
         <div class="flex gap-2"><button id="bio_reset" class="btn btn-ghost text-sm text-red-600 flex-1">Restablecer plantilla</button><button id="bio_cerrar" class="btn btn-p text-sm flex-1">Cerrar</button></div>`);
       $("#bio_cerrar").addEventListener("click", closeModal);
       $("#bio_reset").addEventListener("click", () => confirmar(`¿Restablecer la plantilla facial del RUT ${r.rut}? En su próximo ingreso se volverá a enrolar automáticamente.`, async () => {
-        const pin = (() => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } })();
+        const pin = (() => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } })();
         try {
           const resp = await fetch("/.netlify/functions/biometria", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "borrar", pin, rut: r.rut }) });
           if (!resp.ok) throw new Error((await resp.json().catch(() => ({}))).error || "HTTP " + resp.status);
@@ -5863,7 +5864,7 @@
           ctx.imageSmoothingQuality = "high";
           ctx.drawImage(logo, cx - lw / 2, cy - lh / 2, lw, lh);
         };
-        logo.src = "images/logo-os10-original.webp";
+        logo.src = "images/logo-original.webp";
       };
 
       // qrcodejs dibuja de forma síncrona en canvas; reintenta por si usa <img>
@@ -5919,7 +5920,7 @@
       const usaT = eventoUsaTurnos(ev);
       return asist.map((a, i) => {
         const g = a.guardia || {};
-        // Los supervisores no llevan vigencia OS10 (prórroga / sin prórroga): sus celdas van con "—".
+        // Los supervisores no llevan vigencia (prórroga / sin prórroga): sus celdas van con "—".
         const esSup = !!a.es_supervisor;
         const v = calcularVigencia(g.fecha_ultimo_examen);
         const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim();
@@ -5937,7 +5938,7 @@
       const usaT = eventoUsaTurnos(ev);
       return asist.map((a, i) => {
         const g = a.guardia || {};
-        // Los supervisores no llevan vigencia OS10 (prórroga / sin prórroga): sus celdas van con "—" y sin color.
+        // Los supervisores no llevan vigencia (prórroga / sin prórroga): sus celdas van con "—" y sin color.
         const esSup = !!a.es_supervisor;
         const v = calcularVigencia(g.fecha_ultimo_examen);
         const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim() || "—";
@@ -7011,7 +7012,7 @@
         asistS.forEach((a, i) => {
           const g = a.guardia || {};
           const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim() || "—";
-          // Los supervisores no llevan vigencia OS10: solo RUT, nombre y hora de ingreso.
+          // Los supervisores no llevan vigencia: solo RUT, nombre y hora de ingreso.
           L.push(`${i + 1}. ${a.rut} — ${nom} — ${horaFmt(a.hora_ingreso)}`);
         });
       }
@@ -7218,7 +7219,7 @@
           <aside class="bg-white border-b md:border-b-0 md:border-r border-slate-200 overflow-y-auto flex-shrink-0 md:w-72 md:max-w-none">
             <div class="brand-bg text-white p-4 flex items-center gap-2">
               <button id="hp_back" class="text-white leading-none p-1 -ml-1 rounded-md hover:bg-white/20 transition-colors flex-shrink-0" aria-label="Volver" title="Volver"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-              <img src="images/logo-os10-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="OS10">
+              <img src="images/logo-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="">
               <div class="flex-1 min-w-0"><div class="font-bold text-base leading-tight truncate">${esc(ev.nombre_evento)}</div><div class="text-xs opacity-80 truncate">Historial de partidos</div></div>
             </div>
             <div class="p-3">
@@ -7421,7 +7422,7 @@
           <aside class="bg-white border-b md:border-b-0 md:border-r border-slate-200 overflow-y-auto flex-shrink-0 md:w-72 md:max-w-none">
             <div class="brand-bg text-white p-4 flex items-center gap-2">
               <button id="ht_back" class="text-white leading-none p-1 -ml-1 rounded-md hover:bg-white/20 transition-colors flex-shrink-0" aria-label="Volver" title="Volver"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-              <img src="images/logo-os10-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="OS10">
+              <img src="images/logo-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="">
               <div class="flex-1 min-w-0"><div class="font-bold text-base leading-tight truncate">${esc(ev.nombre_evento)}</div><div class="text-xs opacity-80 truncate">Historial de turnos</div></div>
             </div>
             <div class="p-3">
@@ -8531,7 +8532,7 @@
       }
     }
 
-    function modalCuentaOS10(ev, asist) {
+    function modalCuenta(ev, asist) {
       const isPart = esPartido(ev);
       const saved = ev.reporte_os10 || {};
 
@@ -8591,7 +8592,7 @@
         jefe_seguridad_cant: saved.jefe_seguridad_cant || "01",
         cctv_cant: saved.cctv_cant || "01",
 
-        personal_os10: saved.personal_os10 || "Sgto. 1ro. Daniel Figueroa Chacama.",
+        personal: saved.personal || saved.personal_os10 || "Sgto. 1ro. Daniel Figueroa Chacama.",
         estado: saved.estado || "Sin novedad.",
 
         // --- Datos para el formato narrativo "Cuenta al Coronel" ---
@@ -8634,7 +8635,7 @@
         const lugarTxt = venue ? `realizada en ${venue}${dir ? `, ubicado ${dir}` : ""}` : (dir ? `ubicada en ${dir}` : "");
         const resTxt = state.ddff_num ? `, autorizado mediante Resolución ${state.ddff_num}${state.ddff_fecha ? `, de fecha ${state.ddff_fecha}` : ""}` : "";
         const cuerpo = `${state.partido_o_nombre}${lugarTxt ? ", " + lugarTxt : ""}, ${orgTxt}Empresa de RR.HH. "${state.empresa_nombre}"${state.empresa_rut ? `, RUT ${state.empresa_rut}` : ""}${resTxt}, quienes mantienen ${state.total_ggss} GG.SS, y ${supTxt}, ${observacionesTexto()}`;
-        return `El S.O.M. ${state.som_nombre} acompañado del ${state.personal_os10}\n\n${cuerpo}`;
+        return `El S.O.M. ${state.som_nombre} acompañado del ${state.personal}\n\n${cuerpo}`;
       }
       function buildText() {
         if (formatoInforme === "coronel") return buildTextCoronel();
@@ -8684,7 +8685,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
 * Operador CCTV: ${state.cctv_cant}
 
 *🚔 PERSONAL*
-* ${state.personal_os10}
+* ${state.personal}
 * Estado: ${state.estado}`;
       }
 
@@ -8698,7 +8699,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
           </div>
 
           <div class="flex gap-2 mb-2">
-            <button id="cpCuentaOS10" class="btn btn-p flex-1 py-3 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center gap-1.5 shadow-md rounded-xl transition-all">
+            <button id="cpCuenta" class="btn btn-p flex-1 py-3 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center gap-1.5 shadow-md rounded-xl transition-all">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
               Copiar Cuenta al Portapapeles
             </button>
@@ -8719,7 +8720,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
               <span>Vista previa del mensaje</span>
               <span class="text-emerald-600 font-bold text-xs">Listo para pegar en WhatsApp</span>
             </div>
-            <textarea id="cuentaOS10Preview" class="w-full bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono whitespace-pre-wrap border border-emerald-500/30 shadow-inner h-56 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" readonly></textarea>
+            <textarea id="cuentaPreview" class="w-full bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono whitespace-pre-wrap border border-emerald-500/30 shadow-inner h-56 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" readonly></textarea>
           </div>
 
           <details class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs" open>
@@ -8785,7 +8786,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
               </div>
 
               <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🚔 Personal</div>
-              <div><label class="font-medium text-slate-600">Personal a Cargo</label><input id="r_os10" class="fld text-xs py-1" value="${esc(state.personal_os10)}"/></div>
+              <div><label class="font-medium text-slate-600">Personal a Cargo</label><input id="r_personal" class="fld text-xs py-1" value="${esc(state.personal)}"/></div>
               <div><label class="font-medium text-slate-600">Estado del Evento</label><input id="r_estado" class="fld text-xs py-1" value="${esc(state.estado)}"/></div>
 
               <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🎖️ Cuenta al Coronel <span class="font-normal text-slate-400">(formato narrativo)</span></div>
@@ -8806,7 +8807,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
         </div>
       `);
 
-      const prev = $("#cuentaOS10Preview");
+      const prev = $("#cuentaPreview");
       const updatePreview = () => {
         state.fecha = $("#r_fecha").value.trim();
         state.hora_inicio = $("#r_hora").value.trim();
@@ -8838,7 +8839,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
         state.jefe_seguridad_cant = $("#r_jefe_cant").value.trim();
         state.cctv_cant = $("#r_cctv_cant").value.trim();
 
-        state.personal_os10 = $("#r_os10").value.trim();
+        state.personal = $("#r_personal").value.trim();
         state.estado = $("#r_estado").value.trim();
 
         { const e = $("#r_som"); if (e) state.som_nombre = e.value.trim(); }
@@ -8870,7 +8871,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
         "r_fecha", "r_hora", "r_partido", "r_lugar", "r_res_num", "r_res_fecha", "r_res_entidad",
         "r_cat", "r_aforo", "r_metales", "r_amb", "r_emp_nom", "r_emp_rut", "r_ddff_num", "r_ddff_fecha",
         "r_rep_nom", "r_rep_rut", "r_jefe_nom", "r_jefe_rut", "r_total_ggss", "r_hombres", "r_mujeres",
-        "r_supervisores", "r_jefe_cant", "r_cctv_cant", "r_os10", "r_estado",
+        "r_supervisores", "r_jefe_cant", "r_cctv_cant", "r_personal", "r_estado",
         "r_som", "r_org_nom", "r_org_rut", "r_venue", "r_direccion"
       ];
       inputs.forEach(id => {
@@ -9011,7 +9012,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
         toast("Plantilla de informe guardada para este evento.");
       });
 
-      $("#cpCuentaOS10").addEventListener("click", async () => {
+      $("#cpCuenta").addEventListener("click", async () => {
         updatePreview();
         const textToCopy = prev.value;
         try {
@@ -9764,7 +9765,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
           </table>
         </div>
       </div>
-      <p class="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-2"><img src="images/logo-os10-original.webp" class="w-5 h-5 opacity-60" alt="">Vista de solo lectura</p>
+      <p class="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-2"><img src="images/logo-original.webp" class="w-5 h-5 opacity-60" alt="">Vista de solo lectura</p>
     </div>`;
         // Paneles plegables con auto-repliegue a los 7 s (igual que el "Resumen" del admin).
         const autoRepliegue = (btnId, panelId, chevId, key) => {
@@ -9974,8 +9975,8 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
     /* ===== Semilla de demo (solo la primera vez en modo demo) ===== */
     async function seedDemo() {
       if (USING_SUPABASE) return;
-      if (localStorage.getItem("os10_seeded")) return;
-      localStorage.setItem("os10_seeded", "1");
+      if (localStorage.getItem("ce_seeded")) return;
+      localStorage.setItem("ce_seeded", "1");
       const e1 = await Local.createEvento({ nombre_evento: "Pampilla La Serena", empresa: "MAGATY", cantidad_esperada: 100, fecha_evento: "2026-09-18", slug: makeSlug("Pampilla La Serena", "MAGATY"), turno_horas: 12, turno_inicio: "08:00" });
       const e2 = await Local.createEvento({ nombre_evento: "Combo", empresa: "FONQUI", cantidad_esperada: 30, fecha_evento: "2026-09-19", slug: makeSlug("Combo", "FONQUI"), usa_turnos: false, turno_horas: 8, turno_inicio: "07:00" });
       await Local.createEvento({ nombre_evento: "La Serena vs Huachipato", empresa: "MAGATY", cantidad_esperada: 40, fecha_evento: "2026-09-20", slug: makeSlug("La Serena vs Huachipato", "MAGATY"), tipo: "partido", partido: "La Serena vs Huachipato", usa_turnos: false });

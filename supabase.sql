@@ -1,5 +1,5 @@
 -- =====================================================================
---  CONTROL DE GUARDIAS OS10 — Estructura de base de datos (Supabase)
+--  CONTROL DE GUARDIAS — Estructura de base de datos (Supabase)
 --  Pega TODO este archivo en:  Supabase > SQL Editor > New query > Run
 -- =====================================================================
 
@@ -51,7 +51,7 @@ alter table eventos add column if not exists comuna    text;
 alter table eventos add column if not exists dotacion jsonb default '{}'::jsonb;
 -- QR rotativo por turno (true/false lo fuerza; null = según si el evento usa turnos).
 alter table eventos add column if not exists qr_rotativo boolean;
--- Datos guardados de la "Cuenta OS10" (informe para WhatsApp) de cada evento.
+-- Datos guardados de la "Cuenta" (informe para WhatsApp) de cada evento.
 alter table eventos add column if not exists reporte_os10 jsonb;
 
 create table if not exists guardias_central (

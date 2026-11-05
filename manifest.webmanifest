@@ -1,6 +1,6 @@
 {
   "name": "Control de Guardias",
-  "short_name": "Guardias OS10",
+  "short_name": "Guardias",
   "description": "Control y fiscalización de guardias.",
   "start_url": "./",
   "scope": "./",
