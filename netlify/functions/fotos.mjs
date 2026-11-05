@@ -126,7 +126,7 @@ const PIN_OK_MS = 10 * 60 * 1000;
 const pinesOk = new Map();   // sha256(pin) -> vence
 async function pinAdminValido(pin) {
   if (typeof pin !== "string" || !pin || pin.length > 64) return false;
-  const h = sha256("os10|" + pin), ahora = Date.now();
+  const h = sha256("ce|" + pin), ahora = Date.now();
   if ((pinesOk.get(h) || 0) > ahora) return true;
   const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verificar_clave`, {
     method: "POST",

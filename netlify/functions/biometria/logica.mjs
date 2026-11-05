@@ -44,7 +44,8 @@ export function claves(secreto) {
   else { try { k = Buffer.from(String(secreto || ""), "base64"); } catch { k = null; } }
   if (!k || k.length !== 32) return null;
   const deriva = etiqueta => crypto.createHmac("sha256", k).update(etiqueta).digest();
-  return { cifrado: deriva("os10-bio-plantilla-v1"), firma: deriva("os10-bio-desafio-v1") };
+  // cifradoAnt: subclave de las plantillas enroladas antes del cambio de etiquetas (solo para descifrarlas).
+  return { cifrado: deriva("ce-bio-plantilla-v1"), cifradoAnt: deriva("os10-bio-plantilla-v1"), firma: deriva("ce-bio-desafio-v1") };
 }
 
 // Plantilla (Float32Array 128) <-> texto cifrado. AAD = RUT: una plantilla copiada a otro RUT no descifra.
@@ -56,9 +57,14 @@ export function cifrarPlantilla(k, rut, vec) {
 }
 export function descifrarPlantilla(k, rut, txt) {
   if (!String(txt).startsWith("v1:")) throw new Error("formato de plantilla desconocido");
-  const b = Buffer.from(txt.slice(3), "base64"), d = crypto.createDecipheriv("aes-256-gcm", k.cifrado, b.subarray(0, 12));
-  d.setAAD(Buffer.from(rut)); d.setAuthTag(b.subarray(12, 28));
-  const raw = Buffer.concat([d.update(b.subarray(28)), d.final()]);
+  const b = Buffer.from(txt.slice(3), "base64");
+  const abrir = clave => {
+    const d = crypto.createDecipheriv("aes-256-gcm", clave, b.subarray(0, 12));
+    d.setAAD(Buffer.from(rut)); d.setAuthTag(b.subarray(12, 28));
+    return Buffer.concat([d.update(b.subarray(28)), d.final()]);
+  };
+  let raw;
+  try { raw = abrir(k.cifrado); } catch (e) { if (!k.cifradoAnt) throw e; raw = abrir(k.cifradoAnt); }
   return new Float32Array(raw.buffer, raw.byteOffset, raw.byteLength / 4);
 }
 

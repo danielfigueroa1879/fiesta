@@ -2484,8 +2484,22 @@
        TELÉFONO (IndexedDB) y se reenvía sola: al volver la señal, al reabrir la página o cada minuto,
        hasta 3 h después del ingreso (plazo que acepta el servidor). Al lograrlo se borra del teléfono. ---- */
     const FotoCola = (() => {
-      const abrir = () => new Promise((res, rej) => { const r = indexedDB.open("os10_fotos", 1); r.onupgradeneeded = () => r.result.createObjectStore("pend", { keyPath: "asisId" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
-      const tx = async (modo, fn) => { const db = await abrir(); return new Promise((res, rej) => { const t = db.transaction("pend", modo); const st = t.objectStore("pend"); const out = fn(st); t.oncomplete = () => { db.close(); res(out && out.result); }; t.onerror = () => { db.close(); rej(t.error); }; }); };
+      const abrir = () => new Promise((res, rej) => { const r = indexedDB.open("ce_fotos", 1); r.onupgradeneeded = () => r.result.createObjectStore("pend", { keyPath: "asisId" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+      const tx0 = async (modo, fn) => { const db = await abrir(); return new Promise((res, rej) => { const t = db.transaction("pend", modo); const st = t.objectStore("pend"); const out = fn(st); t.oncomplete = () => { db.close(); res(out && out.result); }; t.onerror = () => { db.close(); rej(t.error); }; }); };
+      // Migración única: traslada las fotos pendientes de la base local antigua a la nueva y la borra.
+      const migrar = (async () => {
+        try {
+          if (!window.indexedDB || !indexedDB.databases) return;
+          const ANT = "os10_fotos";
+          if (!(await indexedDB.databases()).some(d => d.name === ANT)) return;
+          const vieja = await new Promise((res, rej) => { const r = indexedDB.open(ANT, 1); r.onupgradeneeded = () => r.result.createObjectStore("pend", { keyPath: "asisId" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+          const filas = await new Promise((res, rej) => { const q = vieja.transaction("pend", "readonly").objectStore("pend").getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); });
+          vieja.close();
+          if (filas.length) await tx0("readwrite", st => filas.forEach(f => st.put(f)));
+          indexedDB.deleteDatabase(ANT);
+        } catch (_) { }
+      })();
+      const tx = async (modo, fn) => { await migrar; return tx0(modo, fn); };
       return {
         poner: (asisId, evId, blob) => tx("readwrite", st => st.put({ asisId, evId, blob, t: Date.now() })).catch(() => { }),
         quitar: asisId => tx("readwrite", st => st.delete(asisId)).catch(() => { }),
@@ -8534,7 +8548,7 @@
 
     function modalCuenta(ev, asist) {
       const isPart = esPartido(ev);
-      const saved = ev.reporte_os10 || {};
+      const saved = ev.reporte || {};
 
       let defaultFecha = "";
       if (ev.fecha_evento) {
@@ -8592,7 +8606,7 @@
         jefe_seguridad_cant: saved.jefe_seguridad_cant || "01",
         cctv_cant: saved.cctv_cant || "01",
 
-        personal: saved.personal || saved.personal_os10 || "Sgto. 1ro. Daniel Figueroa Chacama.",
+        personal: saved.personal || "Sgto. 1ro. Daniel Figueroa Chacama.",
         estado: saved.estado || "Sin novedad.",
 
         // --- Datos para el formato narrativo "Cuenta al Coronel" ---
@@ -8882,7 +8896,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
       const guardarEstado = async () => {
         updatePreview();
         try {
-          await Data.updateEvento(ev.id, { reporte_os10: state });
+          await Data.updateEvento(ev.id, { reporte: state });
         } catch (e) { console.error("Error guardando plantilla de informe:", e); }
       };
 
