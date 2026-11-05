@@ -101,7 +101,7 @@ Cloudflare → R2 → bucket `guardias` → **Settings → CORS Policy → Add/E
 ```json
 [
   {
-    "AllowedOrigins": ["https://os10eventos.netlify.app"],
+    "AllowedOrigins": ["https://ingresar26.netlify.app"],
     "AllowedMethods": ["GET", "PUT", "HEAD"],
     "AllowedHeaders": ["content-type", "cache-control"],
     "MaxAgeSeconds": 86400
