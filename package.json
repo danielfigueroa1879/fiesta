@@ -1,5 +1,5 @@
 {
-  "name": "eventos-os10",
+  "name": "control-eventos",
   "private": true,
   "description": "Dependencias SOLO de las funciones de Netlify (biometría: jpeg-js, onnxruntime-web; aviso por correo: nodemailer). El sitio no usa build.",
   "dependencies": {

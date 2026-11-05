@@ -6,7 +6,7 @@
 --
 --  ANTES de ejecutarlo, reemplaza en este texto (no lo subas a GitHub con los valores reales):
 --    PEGA_AQUI_EL_AVISO_TOKEN  -> el MISMO texto que pusiste en Netlify como AVISO_TOKEN
---    https://os10eventos.netlify.app -> la dirección de tu sitio, si es otra
+--    https://ingresar26.netlify.app -> la dirección de tu sitio, si es otra
 --
 --  Qué hace:
 --   Cada vez que se registra un ingreso (INSERT en asistencias), la base de datos avisa a la
@@ -27,7 +27,7 @@ set search_path = public
 as $$
 begin
   perform net.http_post(
-    url     := 'https://os10eventos.netlify.app/.netlify/functions/aviso-ingreso',
+    url     := 'https://ingresar26.netlify.app/.netlify/functions/aviso-ingreso',
     headers := jsonb_build_object('Content-Type', 'application/json', 'x-aviso-token', 'PEGA_AQUI_EL_AVISO_TOKEN'),
     body    := jsonb_build_object('record', jsonb_build_object('id', new.id, 'evento_id', new.evento_id, 'hora_ingreso', new.hora_ingreso))
   );

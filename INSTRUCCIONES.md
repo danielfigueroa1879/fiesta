@@ -1,4 +1,4 @@
-# Control de Guardias OS10 — Puesta en marcha
+# Control de Guardias — Puesta en marcha
 
 Sistema multi-evento de control de guardias para Fiestas Patrias. Un solo archivo (`index.html`) + base de datos Supabase + hosting en Netlify.
 
@@ -61,7 +61,7 @@ Permite exigir una **foto** a quien registra su ingreso por el QR, para dejar co
 
 ## 🎨 Personalizar
 - **Colores:** en `index.html`, variable CSS `--brand` (verde institucional).
-- **Reglas legales:** las constantes `MESES_VIGENCIA`, `ENTRADA_VIGENCIA_LEY` y `FECHA_TOPE_PRORROGA` ya están correctas (Ley 21.659 / prórroga Ley 21.825 hasta 28-may-2027). No las cambies salvo instrucción de OS10.
+- **Reglas legales:** las constantes `MESES_VIGENCIA`, `ENTRADA_VIGENCIA_LEY` y `FECHA_TOPE_PRORROGA` ya están correctas (Ley 21.659 / prórroga Ley 21.825 hasta 28-may-2027). No las cambies salvo instrucción oficial.
 
 ## 🔒 Nota de seguridad (importante)
 El PIN del panel es una barrera básica del lado del navegador. La `anon key` de Supabase permite leer y escribir en las tablas a quien tenga el enlace del sistema. Para un evento de fiscalización esto es un riesgo aceptable, pero **no publiques el enlace del panel** (comparte solo los QR de cada evento, que llevan al formulario). Si más adelante quieres control de acceso real (login de administradores, que el público solo pueda registrarse pero no ver ni borrar), se implementa con **Supabase Auth** + políticas RLS por rol — pídemelo y lo agregamos.
@@ -101,7 +101,7 @@ Cloudflare → R2 → bucket `guardias` → **Settings → CORS Policy → Add/E
 ```json
 [
   {
-    "AllowedOrigins": ["https://os10eventos.netlify.app"],
+    "AllowedOrigins": ["https://ingresar26.netlify.app"],
     "AllowedMethods": ["GET", "PUT", "HEAD"],
     "AllowedHeaders": ["content-type", "cache-control"],
     "MaxAgeSeconds": 86400

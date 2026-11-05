@@ -101,7 +101,7 @@ async function sbFetch(cfg, ruta, opts = {}) {
 const PIN_OK_MS = 10 * 60 * 1000, pinesOk = new Map();
 async function exigirPin(cfg, pin) {
   if (typeof pin !== "string" || !pin || pin.length > 64) throw new ErrorCliente("PIN requerido", 401);
-  const h = crypto.createHash("sha256").update("os10-bio|" + pin).digest("hex");
+  const h = crypto.createHash("sha256").update("ce-bio|" + pin).digest("hex");
   if ((pinesOk.get(h) || 0) > Date.now()) return;
   const ok = await sbFetch(cfg, "/rest/v1/rpc/verificar_clave", { method: "POST", body: JSON.stringify({ p_nombre: "admin", p_clave: pin }) });
   if (ok !== true) throw new ErrorCliente("PIN incorrecto", 401);

@@ -15,7 +15,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Control de Guardias — Eventos OS10</title>
+  <title>Control de Guardias — Eventos</title>
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="192x192" href="images/icon-app-192.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -23,7 +23,7 @@
   <meta name="theme-color" content="#0f5323">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Guardias OS10">
+  <meta name="apple-mobile-web-app-title" content="Guardias">
   <!-- Preconexión a los CDNs para acelerar la descarga de librerías -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -52,14 +52,15 @@
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" /></noscript>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script>try { if (localStorage.getItem('os10_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) { }</script>
+  <script>try { for (var i = localStorage.length - 1; i >= 0; i--) { var k = localStorage.key(i); if (k && k.indexOf('os10_') === 0) { var n = 'ce_' + k.slice(5); if (localStorage.getItem(n) === null) localStorage.setItem(n, localStorage.getItem(k)); localStorage.removeItem(k); } } } catch (e) { }</script>
+  <script>try { if (localStorage.getItem('ce_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) { }</script>
   <!-- Aviso disuasivo en la consola del desarrollador (no bloquea DevTools; deja constancia del uso prohibido). -->
   <script>
     (function () {
       try {
-        var t1 = "%c⛔ SISTEMA PROTEGIDO — O.S.10 Coquimbo";
+        var t1 = "%c⛔ SISTEMA PROTEGIDO";
         var s1 = "color:#fff;background:#b91c1c;font-size:20px;font-weight:bold;padding:8px 14px;border-radius:6px";
-        var t2 = "%cEste sistema es de uso exclusivo de fiscalización O.S.10.\nEstá PROHIBIDO modificar, copiar, redistribuir o manipular su código o sus datos.\nEl acceso y las acciones quedan registrados. La intervención no autorizada puede\nconstituir delito conforme a la Ley N° 21.459 (delitos informáticos) y demás normativa vigente.";
+        var t2 = "%cEste sistema es de uso exclusivo de fiscalización.\nEstá PROHIBIDO modificar, copiar, redistribuir o manipular su código o sus datos.\nEl acceso y las acciones quedan registrados. La intervención no autorizada puede\nconstituir delito conforme a la Ley N° 21.459 (delitos informáticos) y demás normativa vigente.";
         var s2 = "color:#b91c1c;font-size:13px;font-weight:600;line-height:1.5";
         var mostrar = function () { try { console.log(t1, s1); console.log(t2, s2); } catch (e) {} };
         mostrar();
@@ -114,8 +115,8 @@
           (function () { debugger; })();   // no-op si DevTools está cerrado; pausa si está abierto
         }, 120);
         // Por si el administrador NECESITA inspeccionar su propio sistema sin estorbo:
-        // en la consola puede escribir  window.__os10DevOff()  para desactivar la trampa.
-        window.__os10DevOff = function () { activo = false; return "Trampa anti-inspección desactivada."; };
+        // en la consola puede escribir  window.__devOff()  para desactivar la trampa.
+        window.__devOff = function () { activo = false; return "Trampa anti-inspección desactivada."; };
       } catch (e) {}
     })();
   </script>
@@ -939,7 +940,7 @@
       /* Botones del encabezado del evento: misma altura; los de texto mismo ancho y los de ícono cuadrados. */
       #evBanner > div:last-child { gap: .4rem; }
       #evBanner > div:last-child > .btn { height: 2.25rem; padding: 0 !important; border-radius: .75rem; box-shadow: none; }
-      #lockTopBtn, #btnCuentaOS10Top { width: 5.75rem; font-size: .66rem !important; gap: .3rem; justify-content: center; text-align: center; overflow: hidden; text-overflow: ellipsis; }
+      #lockTopBtn { width: 5.75rem; font-size: .66rem !important; gap: .3rem; justify-content: center; text-align: center; overflow: hidden; text-overflow: ellipsis; }
       #expExcel, #expPDF, #expFotos, #compartir, #menuEv { width: 2.25rem; display: inline-flex; align-items: center; justify-content: center; }
       #expExcel, #expPDF { font-size: .68rem; }
       #compartir svg, #menuEv svg { width: 18px; height: 18px; }
@@ -994,9 +995,9 @@
       #admTotales { order: 3; flex: 1 1 100%; padding: 0; display: grid !important; grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr)); }
       #admControles { margin-left: auto; }
     }
-    /* Tablet vertical: XLS/PDF siguen en "Compartir" y la Cuenta O.S.10 en ☰; así el encabezado no se desborda. */
+    /* Tablet vertical: XLS/PDF siguen en "Compartir"; así el encabezado no se desborda. */
     @media (min-width: 768px) and (max-width: 1023px) {
-      #btnCuentaOS10Top, #expExcel, #expPDF { display: none !important; }
+      #expExcel, #expPDF { display: none !important; }
       #main > .evHeaderBox > div:first-child { flex: 1 1 0; overflow: hidden; }
       #admControles { flex: 1 1 100%; min-width: 0; }
       #admControles { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1427,7 +1428,7 @@
     //    y las claves reales viven hasheadas en la tabla 'secretos' (ver SQL de instalación).
     //    Para cambiarlas, actualiza la tabla 'secretos' en Supabase, NO este archivo.
 
-    // 3) Reglas legales OS10 (Ley 21.659 / prórroga Ley 21.825). No suelen cambiar.
+    // 3) Reglas legales (Ley 21.659 / prórroga Ley 21.825). No suelen cambiar.
     const MESES_VIGENCIA = 36;
     const ENTRADA_VIGENCIA_LEY = new Date(2025, 10, 28);        // 28-nov-2025 (entrada en vigor)
     const FECHA_TOPE_PRORROGA = new Date(2027, 4, 28, 23, 59, 59); // 28-may-2027 (tope prórroga)
@@ -1435,7 +1436,7 @@
     const USING_SUPABASE = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
     const APP_VERSION = "v3.3";
     // En modo Supabase, limpiar datos de demo viejos guardados en el navegador (evita confusiones/cachés).
-    if (USING_SUPABASE) { try { ["os10_eventos", "os10_guardias", "os10_asistencias", "os10_seeded"].forEach(k => localStorage.removeItem(k)); } catch (e) { } }
+    if (USING_SUPABASE) { try { ["ce_eventos", "ce_guardias", "ce_asistencias", "ce_seeded"].forEach(k => localStorage.removeItem(k)); } catch (e) { } }
 
     /* =========================================================================
        LÓGICA DE VIGENCIA
@@ -1856,7 +1857,7 @@
 
     /* ---- Adaptador LocalStorage (DEMO) ---- */
     const Local = (() => {
-      const K = { ev: "os10_eventos", gu: "os10_guardias", as: "os10_asistencias", hp: "os10_hist_partidos", hpa: "os10_hist_asist", pu: "os10_puestos" };
+      const K = { ev: "ce_eventos", gu: "ce_guardias", as: "ce_asistencias", hp: "ce_hist_partidos", hpa: "ce_hist_asist", pu: "ce_puestos" };
       const get = (k) => { try { return JSON.parse(localStorage.getItem(k) || "[]") } catch { return [] } };
       const set = (k, v) => { localStorage.setItem(k, JSON.stringify(v)); };
       let listeners = [];
@@ -1916,8 +1917,8 @@
         async deletePuesto(id) { set(K.pu, get(K.pu).filter(x => x.id !== id)); set(K.as, get(K.as).map(x => x.puesto_id === id ? { ...x, puesto_id: null } : x)); ping(); },
         async asignarPuesto(asistenciaId, puestoId) { set(K.as, get(K.as).map(x => x.id === asistenciaId ? { ...x, puesto_id: puestoId } : x)); ping(); },
         // Configuración global (demo: en este dispositivo). Ej: clave "foto_ingreso" = "1"/"0".
-        async getConfig(clave) { try { const c = JSON.parse(localStorage.getItem("os10_config") || "{}"); return clave in c ? c[clave] : null; } catch { return null; } },
-        async setConfig(clave, valor) { let c = {}; try { c = JSON.parse(localStorage.getItem("os10_config") || "{}"); } catch {} c[clave] = valor; localStorage.setItem("os10_config", JSON.stringify(c)); ping(); },
+        async getConfig(clave) { try { const c = JSON.parse(localStorage.getItem("ce_config") || "{}"); return clave in c ? c[clave] : null; } catch { return null; } },
+        async setConfig(clave, valor) { let c = {}; try { c = JSON.parse(localStorage.getItem("ce_config") || "{}"); } catch {} c[clave] = valor; localStorage.setItem("ce_config", JSON.stringify(c)); ping(); },
         // Foto de verificación (demo): se guarda como data URL WebP dentro de la asistencia.
         async subirFotoIngreso(evId, asisId, blob) { const url = await blobToDataURL(blob); const a = get(K.as); const r = a.find(x => x.id === asisId); if (r) { r.foto_url = url; set(K.as, a); ping(); } return url; },
         // Retención de fotos (demo): borra las fotos con más de N días (asistencias e historial).
@@ -1978,7 +1979,7 @@
       let canal = null, conectadoAntes = false, ocultaTimer = null;
       const conectarRT = () => {
         if (canal || !listeners.length) return;
-        canal = sb.channel("os10-rt")
+        canal = sb.channel("eventos-rt")
         .on("postgres_changes", { event: "*", schema: "public" }, (pl) => {
           // La ficha de un guardia que cambió en otro equipo se actualiza en la caché con la fila que llega.
           // Lo que cambió en otro equipo deja de servir en la memoria corta (se vuelve a pedir).
@@ -2047,7 +2048,7 @@
       const FOTOS_API = "/.netlify/functions/fotos";
       const esR2 = p => String(p || "").startsWith("r2:");
       const fotosR2 = new Set();   // ids de asistencias cuya foto está en R2
-      const R2_LS = "os10_r2firmas";
+      const R2_LS = "ce_r2firmas";
       try { const g = JSON.parse(localStorage.getItem(R2_LS) || "{}"), t = Date.now(); Object.entries(g).forEach(([k, v]) => { if (v && v.url && v.vence - t > FIRMA_MARGEN_MS) firmas.set(k, v); }); } catch (e) { }
       const guardarFirmasR2 = () => { try { const t = Date.now(), o = {}; firmas.forEach((v, k) => { if (esR2(k) && v.url && v.vence > t) o[k] = v; }); localStorage.setItem(R2_LS, JSON.stringify(o)); } catch (e) { } };
       async function apiFotos(cuerpo) {
@@ -2102,7 +2103,7 @@
       const rutaFotoAsis = (evId, asisId) => (fotosR2.has(asisId) ? "r2:" : "") + `${evId}/${asisId}.webp`;
       // Borrar en R2 exige el PIN de administrador (lo comprueba la función en el servidor). Se
       // guarda solo en esta pestaña al entrar al panel; sin él no se intenta (no gasta llamadas).
-      const pinAdmin = () => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } };
+      const pinAdmin = () => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } };
       // Borra fotos (y sus miniaturas) donde estén: R2 (vía la función) o Supabase Storage.
       // Devuelve el Set de rutas (tal como se pasaron) que NO se pudieron borrar, para no olvidar
       // su referencia y reintentar en la próxima limpieza.
@@ -2151,7 +2152,7 @@
       // BORRADOS PENDIENTES: fotos (o carpetas de eventos) que no se pudieron borrar al quitar un
       // guardia, borrar un historial o eliminar un evento. Se guardan en este equipo y se
       // reintentan en la limpieza automática del panel, así no quedan archivos huérfanos.
-      const PEND_LS = "os10_fotos_pend";
+      const PEND_LS = "ce_fotos_pend";
       const leerPendientes = () => { try { const a = JSON.parse(localStorage.getItem(PEND_LS) || "[]"); return Array.isArray(a) ? a : []; } catch (_) { return []; } };
       const guardarPendientes = a => { try { if (a.length) localStorage.setItem(PEND_LS, JSON.stringify(a.slice(-2000))); else localStorage.removeItem(PEND_LS); } catch (_) { } };
       function anotarPendientes(rutas) { const r = [...rutas].filter(Boolean); if (r.length) guardarPendientes([...new Set([...leerPendientes(), ...r])]); }
@@ -2468,7 +2469,7 @@
     function applyTheme(dark) {
       if (dark) document.documentElement.setAttribute("data-theme", "dark");
       else document.documentElement.removeAttribute("data-theme");
-      try { localStorage.setItem("os10_theme", dark ? "dark" : "light"); } catch (e) { }
+      try { localStorage.setItem("ce_theme", dark ? "dark" : "light"); } catch (e) { }
     }
     // HTML del botón día/noche (se inserta junto al nombre del evento).
     function themeBtnHTML(id) { return `<button id="${id}" type="button" class="themeBtn" title="Cambiar modo día/noche">${isDarkTheme() ? "Noche" : "Día"}</button>`; }
@@ -2483,8 +2484,22 @@
        TELÉFONO (IndexedDB) y se reenvía sola: al volver la señal, al reabrir la página o cada minuto,
        hasta 3 h después del ingreso (plazo que acepta el servidor). Al lograrlo se borra del teléfono. ---- */
     const FotoCola = (() => {
-      const abrir = () => new Promise((res, rej) => { const r = indexedDB.open("os10_fotos", 1); r.onupgradeneeded = () => r.result.createObjectStore("pend", { keyPath: "asisId" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
-      const tx = async (modo, fn) => { const db = await abrir(); return new Promise((res, rej) => { const t = db.transaction("pend", modo); const st = t.objectStore("pend"); const out = fn(st); t.oncomplete = () => { db.close(); res(out && out.result); }; t.onerror = () => { db.close(); rej(t.error); }; }); };
+      const abrir = () => new Promise((res, rej) => { const r = indexedDB.open("ce_fotos", 1); r.onupgradeneeded = () => r.result.createObjectStore("pend", { keyPath: "asisId" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+      const tx0 = async (modo, fn) => { const db = await abrir(); return new Promise((res, rej) => { const t = db.transaction("pend", modo); const st = t.objectStore("pend"); const out = fn(st); t.oncomplete = () => { db.close(); res(out && out.result); }; t.onerror = () => { db.close(); rej(t.error); }; }); };
+      // Migración única: traslada las fotos pendientes de la base local antigua a la nueva y la borra.
+      const migrar = (async () => {
+        try {
+          if (!window.indexedDB || !indexedDB.databases) return;
+          const ANT = "os10_fotos";
+          if (!(await indexedDB.databases()).some(d => d.name === ANT)) return;
+          const vieja = await new Promise((res, rej) => { const r = indexedDB.open(ANT, 1); r.onupgradeneeded = () => r.result.createObjectStore("pend", { keyPath: "asisId" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+          const filas = await new Promise((res, rej) => { const q = vieja.transaction("pend", "readonly").objectStore("pend").getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => rej(q.error); });
+          vieja.close();
+          if (filas.length) await tx0("readwrite", st => filas.forEach(f => st.put(f)));
+          indexedDB.deleteDatabase(ANT);
+        } catch (_) { }
+      })();
+      const tx = async (modo, fn) => { await migrar; return tx0(modo, fn); };
       return {
         poner: (asisId, evId, blob) => tx("readwrite", st => st.put({ asisId, evId, blob, t: Date.now() })).catch(() => { }),
         quitar: asisId => tx("readwrite", st => st.delete(asisId)).catch(() => { }),
@@ -2778,7 +2793,7 @@
         <div style="background:#fff;border-radius:22px;padding:26px 22px;width:100%;max-width:330px;text-align:center;box-shadow:0 20px 50px -12px rgba(0,0,0,.45)">
           <div style="position:relative;width:86px;height:86px;margin:0 auto 14px">
             <div style="position:absolute;inset:0;border-radius:50%;border:6px solid #dcfce7;border-top-color:#16a34a;animation:procGiro .8s linear infinite"></div>
-            <img src="images/logo-os10-original.webp" alt="" style="position:absolute;inset:12px;width:62px;height:62px;border-radius:50%;animation:procLatido 1.6s ease-in-out infinite">
+            <img src="images/logo-original.webp" alt="" style="position:absolute;inset:12px;width:62px;height:62px;border-radius:50%;animation:procLatido 1.6s ease-in-out infinite">
           </div>
           <div style="font-weight:800;font-size:18px;color:#0f172a">Procesando tu ingreso</div>
           <div style="font-size:12px;color:#64748b;margin-top:2px">No cierres esta pantalla</div>
@@ -2939,7 +2954,7 @@
     }
     /* ---- MARCA DE AGUA sobre la foto de ingreso ----
        No impide capturar la pantalla (ninguna web puede), pero deja toda copia
-       IDENTIFICADA (O.S.10 + RUT + fecha), lo que disuade y permite rastrear filtraciones.
+       IDENTIFICADA (RUT + fecha), lo que disuade y permite rastrear filtraciones.
        Se superpone en pantalla, para fotos/capturas de pantalla (la foto no se puede descargar). */
     function _marcaTextoFoto(a, nombre) {
       var rut = (a && a.rut) ? String(a.rut) : "";
@@ -3313,7 +3328,7 @@
               <div id="g_telMsg" class="text-[11px] mt-0.5"></div>
             </div>
             <div>
-              <label id="g_fechaLabel" class="text-sm font-semibold text-slate-700">Fecha último examen OS10</label>
+              <label id="g_fechaLabel" class="text-sm font-semibold text-slate-700">Fecha último examen</label>
               <input id="g_fecha" type="date" class="fld"/>
               <div id="g_fecMsg" class="text-[11px] mt-0.5"></div>
             </div>
@@ -3344,7 +3359,7 @@
         </div>` : ""}
       </div>
 
-      <p class="text-center text-xs text-slate-400 mt-4">Sistema de fiscalización OS10 · ${USING_SUPABASE ? '' : 'MODO DEMO'}</p>
+      <p class="text-center text-xs text-slate-400 mt-4">Sistema de fiscalización · ${USING_SUPABASE ? '' : 'MODO DEMO'}</p>
     </div>
   </div>`;
 
@@ -3405,14 +3420,14 @@
       tel.addEventListener("blur", () => { telTocado = true; if (avisoTel()) sacudirTel(); });
       fecha.addEventListener("change", () => { if (fecha.value && fechaFutura(fecha.value)) { avisoFecha(); vigBox.hidden = true; } else { avisoFecha(); mostrarVigencia(fecha.value); } actualizarBtn(); });
 
-      // El supervisor no da examen OS10: su vigencia (3 años) nace de la fecha de autorización de la resolución.
+      // El supervisor no da examen: su vigencia (3 años) nace de la fecha de autorización de la resolución.
       // Al elegir Supervisor en el desplegable, cambian los rótulos del formulario para reflejarlo.
       const fechaLabel = $("#g_fechaLabel"), vigBoxLabel = $("#vigBoxLabel");
       function aplicarRotuloSupervisor() {
         const esSup = !!(superSel && superSel.value === "supervisor");
-        if (fechaLabel) fechaLabel.textContent = esSup ? "Fecha de autorización de la resolución" : "Fecha último examen OS10";
+        if (fechaLabel) fechaLabel.textContent = esSup ? "Fecha de autorización de la resolución" : "Fecha último examen";
         if (vigBoxLabel) vigBoxLabel.textContent = esSup ? "Estado de la autorización" : "Estado del curso";
-        // Los supervisores NO llevan vigencia OS10 (prórroga / sin prórroga): se oculta el recuadro de estado.
+        // Los supervisores NO llevan vigencia (prórroga / sin prórroga): se oculta el recuadro de estado.
         if (esSup) vigBox.hidden = true; else mostrarVigencia(fecha.value);
       }
       if (superSel) superSel.addEventListener("change", aplicarRotuloSupervisor);
@@ -3707,7 +3722,7 @@
        PANEL ADMIN — gate por PIN
        ========================================================================= */
     function renderAdminGate() {
-      if (sessionStorage.getItem("os10_admin") === "1") return renderAdmin();
+      if (sessionStorage.getItem("ce_admin") === "1") return renderAdmin();
       app.innerHTML = `<div class="min-h-screen flex items-center justify-center p-6">
     <div class="card p-6 w-full max-w-sm text-center">
       <h1 class="font-bold text-lg text-slate-800">Panel de Control de Guardias</h1>
@@ -3721,7 +3736,7 @@
         if (btn) { btn.disabled = true; btn.textContent = "Verificando…"; }
         try {
           const ok = await Data.verificarClave("admin", inp ? inp.value : "");
-          if (ok) { sessionStorage.setItem("os10_admin", "1"); try { sessionStorage.setItem("os10_admin_pin", inp ? inp.value : ""); } catch (_) { } renderAdmin(); return; }
+          if (ok) { sessionStorage.setItem("ce_admin", "1"); try { sessionStorage.setItem("ce_admin_pin", inp ? inp.value : ""); } catch (_) { } renderAdmin(); return; }
           toast("PIN incorrecto", false);
         } catch (e) {
           toast("No se pudo verificar (sin conexión). Intenta nuevamente.", "danger", 4000);
@@ -3762,7 +3777,7 @@
     <!-- Topbar móvil -->
     <div class="md:hidden brand-bg text-white flex items-center justify-between px-4 h-16">
       <button id="hamb" class="w-9 h-9 -ml-1 flex items-center justify-center" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3.5 6h17M3.5 12h17M3.5 18h17"/></svg></button>
-      <div class="font-bold text-lg flex items-center gap-2"><img src="images/logo-os10-original.webp" class="hidden w-8 h-8 rounded-full bg-white/90" alt="OS10"><!-- logo oculto por ahora; quitar "hidden" para mostrarlo -->CONTROL EVENTOS</div>
+      <div class="font-bold text-lg flex items-center gap-2"><img src="images/logo-original.webp" class="hidden w-8 h-8 rounded-full bg-white/90" alt=""><!-- logo oculto por ahora; quitar "hidden" para mostrarlo -->CONTROL EVENTOS</div>
       <!-- Opciones del evento abierto (mismo panel ☰ de PC). Invisible si no hay evento seleccionado. -->
       <button id="menuEvTop" type="button" class="w-9 h-9 -mr-1 flex items-center justify-center invisible" aria-label="Opciones del evento" title="Opciones del evento"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
@@ -3775,7 +3790,6 @@
       <div id="sbBrand" class="brand-bg text-white h-16 px-4 md:h-auto md:pl-3 md:pr-8 md:py-2.5 flex items-center gap-3 md:gap-2 relative">
         <div class="flex-1">
           <div class="font-bold text-lg md:text-[14px] md:whitespace-nowrap leading-tight">CONTROL EVENTOS</div>
-          <div class="text-xs md:text-[11px] opacity-80">O.S.10 Coquimbo</div>
         </div>
         <button id="cerrarMenu" class="md:hidden text-white text-2xl leading-none px-1" aria-label="Cerrar menú">✕</button>
         <button id="sbOcultar" type="button" class="sbToggle" title="Angostar / ampliar panel" aria-label="Angostar o ampliar panel"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><line x1="9" y1="4" x2="9" y2="20"/></svg></button>
@@ -3845,10 +3859,10 @@
       });
       $("#jplBtn").addEventListener("click", () => { if (window.innerWidth < 768 && window.cerrarDrawer) window.cerrarDrawer(); modalJuzgadoTurno(); });
       $("#importar").addEventListener("click", () => { if (window.innerWidth < 768 && window.cerrarDrawer) window.cerrarDrawer(); modalImportar(); });
-      $("#salir").addEventListener("click", () => { sessionStorage.removeItem("os10_admin"); sessionStorage.removeItem("os10_admin_pin"); route(); });
+      $("#salir").addEventListener("click", () => { sessionStorage.removeItem("ce_admin"); sessionStorage.removeItem("ce_admin_pin"); route(); });
       // PC: angostar / ampliar el panel lateral con el botón de la franja verde. Se recuerda en este equipo.
-      const pintarSb = angosto => { document.body.classList.toggle("sb-angosto", angosto); try { localStorage.setItem("os10_sb_angosto", angosto ? "1" : "0"); } catch (_) {} };
-      let sbAngosto = false; try { sbAngosto = localStorage.getItem("os10_sb_angosto") === "1"; } catch (_) {}
+      const pintarSb = angosto => { document.body.classList.toggle("sb-angosto", angosto); try { localStorage.setItem("ce_sb_angosto", angosto ? "1" : "0"); } catch (_) {} };
+      let sbAngosto = false; try { sbAngosto = localStorage.getItem("ce_sb_angosto") === "1"; } catch (_) {}
       pintarSb(sbAngosto);
       $("#sbOcultar").addEventListener("click", () => pintarSb(!document.body.classList.contains("sb-angosto")));
       const hamb = $("#hamb"), sidebar = $("#sidebar"), drawerBk = $("#drawerBk"), cerrarMenu = $("#cerrarMenu");
@@ -3867,9 +3881,9 @@
       [ADMIN_STATE.fotoIngreso, ADMIN_STATE.bioRuts] = await Promise.all([cargarFotoIngresoConfig(), leerBioRuts()]);
       // RETENCIÓN de fotos: al entrar al panel se borran las fotos con más de FOTO_RETENCION_DIAS días (máx. 1 vez cada 6 h por dispositivo).
       try {
-        const ultimaPurga = +(localStorage.getItem("os10_purga_fotos") || 0);
+        const ultimaPurga = +(localStorage.getItem("ce_purga_fotos") || 0);
         if (Date.now() - ultimaPurga > 6 * 3600 * 1000) {
-          localStorage.setItem("os10_purga_fotos", String(Date.now()));
+          localStorage.setItem("ce_purga_fotos", String(Date.now()));
           Data.purgarFotosAntiguas(FOTO_RETENCION_DIAS).then(n => { if (n) console.log(`Fotos de ingreso borradas por antigüedad (>${FOTO_RETENCION_DIAS} días):`, n); }).catch(() => {});
           purgarBiometria();   // intentos con más de 60 días y plantillas sin uso en 60 días (en el servidor)
         }
@@ -4350,13 +4364,13 @@
       if (g && g.spd_verificado) return true;
       return !!(ev && spdVisto(ev.id, a.rut));
     }
-    // ¿El examen OS10 es de este año (año en curso)?
+    // ¿El examen es de este año (año en curso)?
     function examenEsteAno(fechaStr) {
       const d = parseFecha(fechaStr);
       return !!d && d.getFullYear() === new Date().getFullYear();
     }
     // ¿El guardia requiere autorización / resolución SPD? Sí cuando el administrador lo marcó
-    // manualmente (g.spd) o, AUTOMÁTICAMENTE, cuando su examen OS10 es de este año: una
+    // manualmente (g.spd) o, AUTOMÁTICAMENTE, cuando su examen es de este año: una
     // autorización reciente debe estar respaldada por la resolución de la SPD. Los supervisores
     // no se auto-marcan (solo aplica el marcado manual).
     function esSPD(g, a) {
@@ -4528,7 +4542,7 @@
       const nX = filas.filter(a => calcularVigencia(a.guardia?.fecha_ultimo_examen).estado === "VENCIDO_SIN_PRORROGA").length;
       const nS = filas.filter(a => calcularVigencia(a.guardia?.fecha_ultimo_examen).estado === "SIN_CURSO").length;
       const nSup = filasSup.length;
-      // Los supervisores no llevan vigencia OS10, por lo que no se cuentan en prórrogas ni vencidos.
+      // Los supervisores no llevan vigencia, por lo que no se cuentan en prórrogas ni vencidos.
       const totalProrrogas = nP;
       const totalVencidos = nX;
       // Conteo aproximado de hombres/mujeres por primer nombre (ver generoDeNombre).
@@ -4567,7 +4581,6 @@
       </div>
       <div class="flex gap-1.5 flex-shrink-0 items-center">
         ${lockBtnHTML("lockTopBtn", "hidden md:flex")}
-        <button id="btnCuentaOS10Top" class="btn text-xs md:text-sm px-3 py-2 text-white font-extrabold hidden md:flex items-center gap-1.5 shadow-md hover:brightness-110 rounded-xl transition-all" style="background:#25D366;border-color:#25D366" title="Informe Cuenta O.S.10">Cuenta O.S.10</button>
         <button id="expExcel" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar Excel"><span class="font-bold text-green-700">XLS</span></button>
         <button id="expPDF" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="Descargar PDF"><span class="font-bold text-red-600">PDF</span></button>
         ${hayFotosAdmin(asistMostrada) ? `<button id="expFotos" class="btn btn-ghost text-xs px-2.5 hidden md:inline-block" title="PDF o Excel con la foto de ingreso de cada guardia">📸</button>` : ""}
@@ -4635,7 +4648,6 @@
           <span class="text-xs font-semibold">${on ? (todos ? 'Activada' : `Solo ${ADMIN_STATE.bioRuts.size} RUT`) : 'Desactivada (solo foto)'}</span>
         </button>`; })() : ""}
         ${ADMIN_STATE.bioRuts && ADMIN_STATE.bioRuts.size ? `<button id="bioEnrolados" type="button" class="btn text-sm px-4 py-2.5 font-bold shadow-md rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-300" title="Guardias con verificación facial registrada (solo admin)">🧬 Enrolados</button>` : ""}
-        <button id="cuentaOS10" class="btn text-sm px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold shadow-md rounded-xl">📋 Cuenta O.S.10</button>
         <button id="expEventosXls" class="btn text-sm px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white font-bold shadow-md rounded-xl" title="Descargar todos los eventos en Excel (.xlsx) o PDF (hoja oficio horizontal)">⬇ Descargar eventos</button>
         <button id="expInfractores" class="btn text-sm px-4 py-2.5 bg-red-700 hover:bg-red-800 text-white font-bold shadow-md rounded-xl" title="Descargar en Excel el registro de todos los guardias infractores / detenidos">🚩 Infractores</button>
         <button id="revSexo" class="btn text-sm px-4 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white font-bold shadow-md rounded-xl hidden" title="Revisar y corregir el sexo (H/M) de los guardias para que el conteo sea exacto">👥 Sexo</button>
@@ -4761,7 +4773,7 @@
       $("#admQrFondo").addEventListener("click", () => qrAbrir(false));
       if (!window._admQrEsc) { window._admQrEsc = true; document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("admQrFondo") && ADMIN_STATE.showQR) { const b = document.getElementById("admQrCerrarBtn"); if (b) b.click(); } }); }
 
-      // QR (con logo O.S.10 al centro y margen blanco)
+      // QR (con logo al centro y margen blanco)
       if (ADMIN_STATE.showQR) montarQR($("#qrbox"), ev);   // si no, se dibuja al abrirlo (ahorra tiempo en cada repintado)
       if ($("#qrDl")) $("#qrDl").addEventListener("click", () => dlQR(ev));
       if ($("#qrPr")) $("#qrPr").addEventListener("click", () => prQR(ev));
@@ -4804,8 +4816,6 @@
           } catch (e) { toast("Error al archivar: " + (e.message || e), false); }
         });
       });
-      const bC1 = $("#btnCuentaOS10Top"); if (bC1) bC1.addEventListener("click", () => modalCuentaOS10(ev, asistVigentes(ev, asist)));
-      const bC2 = $("#cuentaOS10"); if (bC2) bC2.addEventListener("click", () => modalCuentaOS10(ev, asistVigentes(ev, asist)));
       const bEvXls = $("#expEventosXls"); if (bEvXls) bEvXls.addEventListener("click", modalExportEventos);
       const bInf = $("#expInfractores"); if (bInf) bInf.addEventListener("click", modalInfractores);
       const bSexo = $("#revSexo"); if (bSexo) bSexo.addEventListener("click", modalRevisarSexo);
@@ -4958,7 +4968,7 @@
       asist.forEach(a => { const d = new Date(a.hora_ingreso); if (!isNaN(d.getTime())) horas[d.getHours()].count++; });
       const maxHora = Math.max(1, ...horas.map(h => h.count));
 
-      // --- Estado de vigencia (solo guardias: los supervisores no llevan vigencia OS10) ---
+      // --- Estado de vigencia (solo guardias: los supervisores no llevan vigencia) ---
       const asistVig = asist.filter(a => !a.es_supervisor);
       const vig = { VIGENTE: 0, VENCIDO_CON_PRORROGA: 0, VENCIDO_SIN_PRORROGA: 0, SIN_CURSO: 0 };
       asistVig.forEach(a => { const e = calcularVigencia(a.guardia?.fecha_ultimo_examen).estado; if (e in vig) vig[e]++; });
@@ -5016,7 +5026,7 @@
             <div class="flex items-end gap-1 overflow-x-auto pb-1" style="height:${CH + 30}px">${barrasHora}</div>
           </div>
           <div class="lg:col-span-2">
-            <div class="text-sm font-medium text-slate-600 mb-2">Estado de vigencia (O.S.10)</div>
+            <div class="text-sm font-medium text-slate-600 mb-2">Estado de vigencia</div>
             ${barrasVig}
           </div>
         </div>
@@ -5062,10 +5072,10 @@
           e.stopPropagation();
           if (!pedirPin) { toast("Biometría: " + txt, false, 5000); return; }
           const v = prompt("Biometría: ingresa el PIN de administrador para ver los resultados");
-          if (v) { try { sessionStorage.setItem("os10_admin_pin", v); } catch (_) { } if (ADMIN_STATE._bio) ADMIN_STATE._bio.t = 0; pintarBioPiloto(root); }
+          if (v) { try { sessionStorage.setItem("ce_admin_pin", v); } catch (_) { } if (ADMIN_STATE._bio) ADMIN_STATE._bio.t = 0; pintarBioPiloto(root); }
         };
       });
-      const pin = (() => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } })();
+      const pin = (() => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } })();
       if (!pin) { aviso("falta el PIN en esta pestaña (clic para ingresarlo)", true); return; }
       const memo = ADMIN_STATE._bio || (ADMIN_STATE._bio = { t: 0, r: {} });
       const ids = [...new Set(marcas.map(m => m.dataset.bio))];
@@ -5077,7 +5087,7 @@
           const resp = await fetch("/.netlify/functions/biometria", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "resultados", pin, asistencia_ids: ids }) });
           if (!resp.ok) {
             const err = (await resp.json().catch(() => ({}))).error || ("HTTP " + resp.status);
-            if (resp.status === 401) { try { sessionStorage.removeItem("os10_admin_pin"); } catch (_) { } aviso("PIN incorrecto (clic para ingresarlo)", true); }
+            if (resp.status === 401) { try { sessionStorage.removeItem("ce_admin_pin"); } catch (_) { } aviso("PIN incorrecto (clic para ingresarlo)", true); }
             else aviso("no se pudo consultar: " + err, false);
             return;
           }
@@ -5240,7 +5250,7 @@
           ${grupo("Ingreso", item("toggleFotoQR", ICO.camara, "Foto de ingreso", { estado: sw("toggleFotoQR") }) + item("toggleBioQR", ICO.cara, "Biometría", { estado: sw("toggleBioQR") }) + item("bioEnrolados", ICO.usuarios, "Enrolados"))}
           ${grupo("Código QR", item("toggleQR", ICO.qr, "Ver código QR") + item("qrDl", ICO.descarga, "Descargar QR (PNG)") + item("qrPr", ICO.imprimir, "Imprimir QR") + item("qrCp", ICO.enlace, "Copiar link de ingreso"))}
           ${grupo("Evento", item("histTurnos", ICO.carpeta) + item("cerrarPartido", ICO.bandera2) + item("histPartidos", ICO.carpeta) + item("distEv", ICO.mapa, "Distribución") + item("linkEmpresa", ICO.enlace, "Link empresa") + item("linkVista", ICO.ojo, "Compartir solo vista") + item("editEv", ICO.lapiz, "Editar evento") + item("archEv", ICO.archivo))}
-          ${grupo("Informes", item("cuentaOS10", ICO.informe, "Cuenta O.S.10") + item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
+          ${grupo("Informes", item("expEventosXls", ICO.descarga, "Descargar eventos") + item("expInfractores", ICO.bandera, "Infractores") + item("revSexo", ICO.persona))}
           ${grupo("Zona de cuidado", item("delEv", ICO.basura, "Eliminar evento", { peligro: true }))}
         </div>
       </aside>`;
@@ -5293,19 +5303,19 @@
     // abrir la ventana (una llamada a la función + nombres desde la caché de guardias).
     // Período del panel de enrolados: "" = últimos 7 días, o una fecha "AAAA-MM-DD" (desde esa fecha, hora local).
     // Se recuerda en esta pestaña para no tener que elegirlo cada vez.
-    const enrDesdeGuardado = () => { try { return sessionStorage.getItem("os10_enr_desde") || ""; } catch (_) { return ""; } };
+    const enrDesdeGuardado = () => { try { return sessionStorage.getItem("ce_enr_desde") || ""; } catch (_) { return ""; } };
     async function modalEnrolados(desde) {
       desde = /^\d{4}-\d{2}-\d{2}$/.test(desde || "") ? desde : "";
-      try { sessionStorage.setItem("os10_enr_desde", desde); } catch (_) { }
+      try { sessionStorage.setItem("ce_enr_desde", desde); } catch (_) { }
       const desdeIso = desde ? new Date(+desde.slice(0, 4), +desde.slice(5, 7) - 1, +desde.slice(8, 10)).toISOString() : "";
-      let pin = (() => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } })();
-      if (!pin) { pin = prompt("Biometría: ingresa el PIN de administrador") || ""; if (!pin) return; try { sessionStorage.setItem("os10_admin_pin", pin); } catch (_) { } }
+      let pin = (() => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } })();
+      if (!pin) { pin = prompt("Biometría: ingresa el PIN de administrador") || ""; if (!pin) return; try { sessionStorage.setItem("ce_admin_pin", pin); } catch (_) { } }
       openModal(`<div class="text-center text-slate-500 py-6">🧬 Cargando enrolados…</div>`);
       let d;
       try {
         const r = await fetch("/.netlify/functions/biometria", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "resumen", pin, ...(desdeIso ? { desde: desdeIso } : {}) }) });
         d = await r.json().catch(() => ({}));
-        if (r.status === 401) { try { sessionStorage.removeItem("os10_admin_pin"); } catch (_) { } closeModal(); toast("PIN incorrecto.", "danger", 4000); return; }
+        if (r.status === 401) { try { sessionStorage.removeItem("ce_admin_pin"); } catch (_) { } closeModal(); toast("PIN incorrecto.", "danger", 4000); return; }
         if (!r.ok) throw new Error(d.error || ("HTTP " + r.status));
       } catch (e) { closeModal(); toast("No se pudo consultar: " + (e.message || e), "danger", 5000); return; }
       const lista = d.lista || [];
@@ -5408,7 +5418,7 @@
     }
     // RETENCIÓN BIOMÉTRICA (60 días): la función borra los intentos con más de 60 días y las plantillas de
     // guardias sin ingresos en 60 días. Requiere el PIN de esta pestaña; si falla, se reintenta la próxima vez.
-    function purgarBioPin() { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } }
+    function purgarBioPin() { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } }
     async function purgarBiometria() {
       const pin = purgarBioPin(); if (!pin || !USING_SUPABASE) return;
       try {
@@ -5428,7 +5438,7 @@
         <div class="flex gap-2"><button id="bio_reset" class="btn btn-ghost text-sm text-red-600 flex-1">Restablecer plantilla</button><button id="bio_cerrar" class="btn btn-p text-sm flex-1">Cerrar</button></div>`);
       $("#bio_cerrar").addEventListener("click", closeModal);
       $("#bio_reset").addEventListener("click", () => confirmar(`¿Restablecer la plantilla facial del RUT ${r.rut}? En su próximo ingreso se volverá a enrolar automáticamente.`, async () => {
-        const pin = (() => { try { return sessionStorage.getItem("os10_admin_pin") || ""; } catch (_) { return ""; } })();
+        const pin = (() => { try { return sessionStorage.getItem("ce_admin_pin") || ""; } catch (_) { return ""; } })();
         try {
           const resp = await fetch("/.netlify/functions/biometria", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "borrar", pin, rut: r.rut }) });
           if (!resp.ok) throw new Error((await resp.json().catch(() => ({}))).error || "HTTP " + resp.status);
@@ -5816,7 +5826,7 @@
       }
     }
 
-    /* ---- QR con logo O.S.10 + margen blanco ---- */
+    /* ---- QR con logo + margen blanco ---- */
     function renderQRConLogo(container, text) {
       const SIZE = 150;      // módulo del QR (unidades lógicas)
       const MARGIN = 7;      // margen blanco (quiet zone) discreto
@@ -5864,7 +5874,7 @@
           ctx.imageSmoothingQuality = "high";
           ctx.drawImage(logo, cx - lw / 2, cy - lh / 2, lw, lh);
         };
-        logo.src = "images/logo-os10-original.webp";
+        logo.src = "images/logo-original.webp";
       };
 
       // qrcodejs dibuja de forma síncrona en canvas; reintenta por si usa <img>
@@ -5920,7 +5930,7 @@
       const usaT = eventoUsaTurnos(ev);
       return asist.map((a, i) => {
         const g = a.guardia || {};
-        // Los supervisores no llevan vigencia OS10 (prórroga / sin prórroga): sus celdas van con "—".
+        // Los supervisores no llevan vigencia (prórroga / sin prórroga): sus celdas van con "—".
         const esSup = !!a.es_supervisor;
         const v = calcularVigencia(g.fecha_ultimo_examen);
         const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim();
@@ -5938,7 +5948,7 @@
       const usaT = eventoUsaTurnos(ev);
       return asist.map((a, i) => {
         const g = a.guardia || {};
-        // Los supervisores no llevan vigencia OS10 (prórroga / sin prórroga): sus celdas van con "—" y sin color.
+        // Los supervisores no llevan vigencia (prórroga / sin prórroga): sus celdas van con "—" y sin color.
         const esSup = !!a.es_supervisor;
         const v = calcularVigencia(g.fecha_ultimo_examen);
         const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim() || "—";
@@ -6128,7 +6138,7 @@
         const _norm = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
         const eventos = (ADMIN_STATE.eventos || []).filter(e => !esPartido(e) && !_norm(e.nombre_evento).includes("teleton"));
         if (!eventos.length) {
-          openModal(`<div><h2 class="font-bold text-slate-800 mb-2">Resumen Fiestas Patrias O.S.10 Coquimbo</h2><p class="text-slate-500 text-sm">No hay eventos para resumir (los partidos de estadio quedan excluidos).</p><button id="rfp_close" class="btn btn-ghost w-full mt-4">Cerrar</button></div>`);
+          openModal(`<div><h2 class="font-bold text-slate-800 mb-2">Resumen Fiestas Patrias</h2><p class="text-slate-500 text-sm">No hay eventos para resumir (los partidos de estadio quedan excluidos).</p><button id="rfp_close" class="btn btn-ghost w-full mt-4">Cerrar</button></div>`);
           const b = $("#rfp_close"); if (b) b.addEventListener("click", closeModal);
           return;
         }
@@ -6170,7 +6180,7 @@
         }).join("");
         openModal(`
       <div class="flex items-center justify-between mb-3">
-        <h2 class="font-bold text-slate-800 text-base">Resumen Fiestas Patrias O.S.10 Coquimbo</h2>
+        <h2 class="font-bold text-slate-800 text-base">Resumen Fiestas Patrias</h2>
         <button id="rfp_x" class="text-slate-400 hover:text-slate-700 text-xl leading-none">✕</button>
       </div>
       <p class="text-xs text-slate-500 mb-3">Guardias y supervisores controlados. Total por día: cada ingreso cuenta.</p>
@@ -6636,7 +6646,7 @@
         didDrawPage: () => {
           const H = doc.internal.pageSize.getHeight();
           doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-          doc.text("O.S.10 Coquimbo · Sistema de control de guardias", W / 2, H - 18, { align: "center" });
+          doc.text("Sistema de control de guardias", W / 2, H - 18, { align: "center" });
           doc.text("Pág. " + doc.internal.getNumberOfPages(), W - 28, H - 18, { align: "right" });
         }
       });
@@ -6726,7 +6736,7 @@
         <div class="sub">Total: <b>${asistG.length}</b>${ev.cantidad_esperada ? " / " + esc(ev.cantidad_esperada) : ""} guardias${asistS.length ? " · <b>" + asistS.length + "</b> supervisor" + (asistS.length === 1 ? "" : "es") : ""} · <b>${contarHM(asistG).h}</b> H · <b>${contarHM(asistG).m}</b> M · Generado ${esc(new Date().toLocaleString("es-CL", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false, hourCycle: "h23" }))}</div>
         <table><thead><tr>${th}</tr></thead><tbody>${tr || `<tr><td colspan="${cols.length}">Sin guardias registrados.</td></tr>`}</tbody></table>
         ${bloqueSup}
-        <div class="foot">Prefectura O.S.10 Coquimbo · Documento generado desde el sistema de control de guardias.</div>
+        <div class="foot">Documento generado desde el sistema de control de guardias.</div>
         <script>window.onload=()=>{window.print()}<\/script>
       </body></html>`;
     }
@@ -6802,7 +6812,7 @@
         didDrawPage: () => {
           const H = doc.internal.pageSize.getHeight();
           doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-          doc.text("O.S.10 Coquimbo · Sistema de control de guardias", W / 2, H - 18, { align: "center" });
+          doc.text("Sistema de control de guardias", W / 2, H - 18, { align: "center" });
           doc.text("Pág. " + doc.internal.getNumberOfPages(), W - 28, H - 18, { align: "right" });
         }
       });
@@ -7012,7 +7022,7 @@
         asistS.forEach((a, i) => {
           const g = a.guardia || {};
           const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim() || "—";
-          // Los supervisores no llevan vigencia OS10: solo RUT, nombre y hora de ingreso.
+          // Los supervisores no llevan vigencia: solo RUT, nombre y hora de ingreso.
           L.push(`${i + 1}. ${a.rut} — ${nom} — ${horaFmt(a.hora_ingreso)}`);
         });
       }
@@ -7219,7 +7229,7 @@
           <aside class="bg-white border-b md:border-b-0 md:border-r border-slate-200 overflow-y-auto flex-shrink-0 md:w-72 md:max-w-none">
             <div class="brand-bg text-white p-4 flex items-center gap-2">
               <button id="hp_back" class="text-white leading-none p-1 -ml-1 rounded-md hover:bg-white/20 transition-colors flex-shrink-0" aria-label="Volver" title="Volver"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-              <img src="images/logo-os10-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="OS10">
+              <img src="images/logo-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="">
               <div class="flex-1 min-w-0"><div class="font-bold text-base leading-tight truncate">${esc(ev.nombre_evento)}</div><div class="text-xs opacity-80 truncate">Historial de partidos</div></div>
             </div>
             <div class="p-3">
@@ -7422,7 +7432,7 @@
           <aside class="bg-white border-b md:border-b-0 md:border-r border-slate-200 overflow-y-auto flex-shrink-0 md:w-72 md:max-w-none">
             <div class="brand-bg text-white p-4 flex items-center gap-2">
               <button id="ht_back" class="text-white leading-none p-1 -ml-1 rounded-md hover:bg-white/20 transition-colors flex-shrink-0" aria-label="Volver" title="Volver"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-              <img src="images/logo-os10-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="OS10">
+              <img src="images/logo-original.webp" class="w-10 h-10 rounded-full bg-white/90 flex-shrink-0" alt="">
               <div class="flex-1 min-w-0"><div class="font-bold text-base leading-tight truncate">${esc(ev.nombre_evento)}</div><div class="text-xs opacity-80 truncate">Historial de turnos</div></div>
             </div>
             <div class="p-3">
@@ -7886,7 +7896,7 @@
             margin: { left: marginX, right: marginX, bottom: 34 },
             didDrawPage: () => {
               doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-              doc.text("O.S.10 Coquimbo · Distribución de facciones", W / 2, H - 16, { align: "center" });
+              doc.text("Distribución de facciones", W / 2, H - 16, { align: "center" });
               doc.text("Pág. " + doc.internal.getNumberOfPages(), W - marginX, H - 16, { align: "right" });
             }
           });
@@ -8083,7 +8093,6 @@
       $("#dist_panel", ov).addEventListener("click", togglePanel);
     }
 
-    /* ---- Modal Cuenta O.S.10 (Informe para WhatsApp) ---- */
     // Consultar guardia en Zosepcar: ventana flotante dentro de la app.
     // - Arrastrable desde la barra de titulo (mouse y touch via pointer events).
     // - Redimensionable desde la esquina inferior derecha (CSS resize: both).
@@ -8530,506 +8539,6 @@
         console.error("verificarTodosAsistido:", err);
         try { toast("No se pudo iniciar la verificación", false); } catch (_) {}
       }
-    }
-
-    function modalCuentaOS10(ev, asist) {
-      const isPart = esPartido(ev);
-      const saved = ev.reporte_os10 || {};
-
-      let defaultFecha = "";
-      if (ev.fecha_evento) {
-        const parts = ev.fecha_evento.split("-");
-        if (parts.length === 3) defaultFecha = `${parts[2]}.${parts[1]}.${parts[0]}`;
-      }
-      if (!defaultFecha) {
-        const d = new Date();
-        defaultFecha = `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
-      }
-
-      // Los supervisores se cuentan aparte del total de guardias.
-      const asistGuardias = (asist || []).filter(a => !a.es_supervisor);
-      const asistSupervisores = (asist || []).filter(a => a.es_supervisor);
-
-      // Conteo automático en tiempo real desde la asistencia registrada
-      const calcHombres = asistGuardias.filter(a => sexoGuardia(a.guardia) === "H").length;
-      const calcMujeres = asistGuardias.filter(a => sexoGuardia(a.guardia) === "M").length;
-      const calcSupervisores = asistSupervisores.length;
-      const calcTotalGGSS = asistGuardias.length;
-
-      const autoHombres = asistGuardias.length ? calcHombres : (saved.hombres != null ? saved.hombres : Math.round((ev.cantidad_esperada || 0) * 0.8));
-      const autoMujeres = asistGuardias.length ? calcMujeres : (saved.mujeres != null ? saved.mujeres : Math.max(0, (ev.cantidad_esperada || 0) - autoHombres));
-      const autoTotalGGSS = asistGuardias.length ? calcTotalGGSS : (saved.total_ggss != null ? saved.total_ggss : (ev.cantidad_esperada || 0));
-      const autoSupervisores = String(calcSupervisores).padStart(2, '0');
-
-      const state = {
-        fecha: saved.fecha || defaultFecha,
-        hora_inicio: saved.hora_inicio || (horarioEv(ev) ? `${horarioEv(ev).inicio} hrs.` : ev.turno_inicio ? `${ev.turno_inicio} hrs.` : "20:00 hrs."),
-        partido_o_nombre: saved.partido_o_nombre || (isPart ? (ev.partido || ev.nombre_evento) : ev.nombre_evento),
-        lugar: saved.lugar || (isPart ? "Estadio Francisco Sánchez Rumoroso, Coquimbo." : "Coquimbo."),
-
-        resolucion_num: saved.resolucion_num || "N°877",
-        resolucion_fecha: saved.resolucion_fecha || "28.08.2026",
-        resolucion_entidad: saved.resolucion_entidad || "Delegación Presidencial Regional de Coquimbo.",
-        categoria: saved.categoria || "Clase C",
-        aforo: saved.aforo || (ev.cantidad_esperada ? `${(ev.cantidad_esperada * 100).toLocaleString('es-CL')} personas.` : "10.000 personas."),
-        detec_metales: saved.detec_metales || "29 de 25.",
-        ambulancias: saved.ambulancias || "02",
-
-        empresa_nombre: saved.empresa_nombre || (isPart ? (ev.empresa ? `${ev.empresa} Sc Spa.` : "North Security Sc Spa.") : (ev.empresa || "")),
-        empresa_rut: saved.empresa_rut || "77.671.725-8",
-        ddff_num: saved.ddff_num || "N°78",
-        ddff_fecha: saved.ddff_fecha || "25.08.2026",
-
-        rep_legal_nombre: saved.rep_legal_nombre || "Sebastián Urbina Isla",
-        rep_legal_rut: saved.rep_legal_rut || "17827708-1",
-        jefe_seguridad_nombre: saved.jefe_seguridad_nombre || "Carlos Lillo Julio",
-        jefe_seguridad_rut: saved.jefe_seguridad_rut || "10592675-8",
-
-        total_ggss: autoTotalGGSS,
-        hombres: autoHombres,
-        mujeres: autoMujeres,
-        supervisores: autoSupervisores,
-        jefe_seguridad_cant: saved.jefe_seguridad_cant || "01",
-        cctv_cant: saved.cctv_cant || "01",
-
-        personal_os10: saved.personal_os10 || "Sgto. 1ro. Daniel Figueroa Chacama.",
-        estado: saved.estado || "Sin novedad.",
-
-        // --- Datos para el formato narrativo "Cuenta al Coronel" ---
-        som_nombre: saved.som_nombre || "Luis Sáez Toledo",
-        organizador_nombre: saved.organizador_nombre || "",
-        organizador_rut: saved.organizador_rut || "",
-        coronel_venue: saved.coronel_venue || (ev.direccion || ev.nombre_evento || ""),
-        coronel_direccion: saved.coronel_direccion || [ev.direccion, ev.comuna].filter(Boolean).join(", ")
-      };
-      let formatoInforme = saved.formato || "estructurado"; // "estructurado" | "coronel"
-
-      // Observaciones (infracciones / detenciones) tomadas de la asistencia real del evento.
-      function observacionesTexto() {
-        const conObs = (asist || []).filter(a => tieneFicha(a.guardia));
-        if (!conObs.length) return "Sin Observaciones.";
-        const partes = conObs.map(a => {
-          const g = a.guardia || {};
-          const nom = ((g.nombres || "") + " " + (g.apellidos || "")).trim() || a.rut;
-          const fr = getInfracciones(g).map(r => recFrase(r)).join("; ");
-          return `${nom} (${a.rut}): ${fr}`;
-        });
-        return "Con Observaciones: " + partes.join(" / ") + ".";
-      }
-
-      function obtenerSaludoHorario() {
-        const h = new Date().getHours();
-        if (h >= 5 && h < 12) return "Buenos días";
-        if (h >= 12 && h < 20) return "Buenas tardes";
-        return "Buenas noches";
-      }
-
-      // Formato narrativo para "cuenta al Coronel" (un párrafo por evento, estilo oficio).
-      function buildTextCoronel() {
-        const nSup = parseInt(state.supervisores, 10) || 0;
-        const supTxt = nSup === 1 ? "01 Supervisor" : String(nSup).padStart(2, "0") + " Supervisores";
-        const org = (state.organizador_nombre || "").trim();
-        const orgTxt = org ? `organizado por la Empresa ${org}${state.organizador_rut ? `, RUT ${state.organizador_rut}` : ""}, que requirió los servicios de Seguridad Privada a la ` : "con servicios de Seguridad Privada de la ";
-        const venue = (state.coronel_venue || "").trim();
-        const dir = (state.coronel_direccion || "").trim();
-        const lugarTxt = venue ? `realizada en ${venue}${dir ? `, ubicado ${dir}` : ""}` : (dir ? `ubicada en ${dir}` : "");
-        const resTxt = state.ddff_num ? `, autorizado mediante Resolución ${state.ddff_num}${state.ddff_fecha ? `, de fecha ${state.ddff_fecha}` : ""}` : "";
-        const cuerpo = `${state.partido_o_nombre}${lugarTxt ? ", " + lugarTxt : ""}, ${orgTxt}Empresa de RR.HH. "${state.empresa_nombre}"${state.empresa_rut ? `, RUT ${state.empresa_rut}` : ""}${resTxt}, quienes mantienen ${state.total_ggss} GG.SS, y ${supTxt}, ${observacionesTexto()}`;
-        return `El S.O.M. ${state.som_nombre} acompañado del ${state.personal_os10}\n\n${cuerpo}`;
-      }
-      function buildText() {
-        if (formatoInforme === "coronel") return buildTextCoronel();
-        const saludo = obtenerSaludoHorario();
-        const header = isPart
-          ? "*🏟️ INFORME ESTADIO*" 
-          : `*🎪 INFORME EVENTO: ${state.partido_o_nombre}*`;
-
-        const matchOrLocation = isPart 
-          ? `* ${state.partido_o_nombre}\n* ${state.lugar}` 
-          : `* ${state.lugar}`;
-
-        return `${saludo}, OS10 Coquimbo remite el siguiente Informe:
-
-${header}
-* Fecha: ${state.fecha}
-* Hora inicio: ${state.hora_inicio}
-${matchOrLocation}
-
-*📋 DATOS ADMINISTRATIVOS*
-${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
-   de la ${state.resolucion_entidad}
-* Categoría: ${state.categoria}
-` : ``}* Aforo: ${state.aforo}
-* Detec. Metales: ${state.detec_metales}
-* Ambulancias 🚑: ${state.ambulancias}
-
-*🏢 EMPRESA SEGURIDAD*
-* ${state.empresa_nombre}
-* RUT: ${state.empresa_rut}
-* DD.FF.: ${state.ddff_num} (${state.ddff_fecha})
-
-*👥 REPRESENTANTES*
-* Representante Legal: 
-   ${state.rep_legal_nombre}
-   RUT: ${state.rep_legal_rut}
-* Jefe Seguridad: 
-   ${state.jefe_seguridad_nombre}
-   C/I: ${state.jefe_seguridad_rut}
-
-*👮‍♂️ PERSONAL DE SEGURIDAD*
-* Total GG.SS.: ${state.total_ggss}
-* Hombres: ${state.hombres}
-* Mujeres: ${state.mujeres}
-* Supervisores: ${state.supervisores}
-* Jefe de Seguridad: ${state.jefe_seguridad_cant}
-* Operador CCTV: ${state.cctv_cant}
-
-*🚔 PERSONAL OS.10*
-* ${state.personal_os10}
-* Estado: ${state.estado}`;
-      }
-
-      openModal(`
-        <div class="space-y-3">
-          <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-1">
-            <h2 class="font-bold text-lg text-slate-800 flex items-center gap-2">
-              <span class="text-emerald-700 text-xl">📋</span> Informe Cuenta O.S.10
-            </h2>
-            <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">Formato WhatsApp</span>
-          </div>
-
-          <div class="flex gap-2 mb-2">
-            <button id="cpCuentaOS10" class="btn btn-p flex-1 py-3 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center gap-1.5 shadow-md rounded-xl transition-all">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar Cuenta al Portapapeles
-            </button>
-            <label class="btn btn-ghost flex-1 py-3 text-sm flex items-center justify-center gap-1.5 shadow-md rounded-xl cursor-pointer hover:bg-slate-50 transition-all border-dashed border-2 border-slate-300">
-              <input type="file" id="pdfUploadInput" accept="application/pdf" class="hidden" />
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-              <span id="pdfUploadLabel">Autocompletar PDF</span>
-            </label>
-          </div>
-
-          <div class="flex gap-2 mb-2">
-            <button type="button" id="fmt_estructurado" class="btn flex-1 py-2 text-xs font-bold rounded-xl">Estructurado</button>
-            <button type="button" id="fmt_coronel" class="btn flex-1 py-2 text-xs font-bold rounded-xl">Cuenta al Coronel</button>
-          </div>
-
-          <div class="relative">
-            <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1 flex justify-between items-center">
-              <span>Vista previa del mensaje</span>
-              <span class="text-emerald-600 font-bold text-xs">Listo para pegar en WhatsApp</span>
-            </div>
-            <textarea id="cuentaOS10Preview" class="w-full bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono whitespace-pre-wrap border border-emerald-500/30 shadow-inner h-56 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed" readonly></textarea>
-          </div>
-
-          <details class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs" open>
-            <summary class="font-bold text-slate-700 cursor-pointer text-xs mb-2 select-none flex items-center justify-between">
-              <span>✎ Editar datos del informe (Resolución, Empresa, Representantes, Personal)</span>
-              <span class="text-slate-400 font-normal text-[11px]">Desplegar/ocultar</span>
-            </summary>
-            
-            <div class="space-y-2.5 pt-2 border-t border-slate-200">
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700">🏟️ / 🎪 Datos del Evento</div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Fecha</label><input id="r_fecha" class="fld text-xs py-1" value="${esc(state.fecha)}"/></div>
-                <div><label class="font-medium text-slate-600">Hora inicio</label><input id="r_hora" class="fld text-xs py-1" value="${esc(state.hora_inicio)}"/></div>
-              </div>
-              <div><label class="font-medium text-slate-600">${isPart ? "Partido / Equipos" : "Nombre del Evento"}</label><input id="r_partido" class="fld text-xs py-1" value="${esc(state.partido_o_nombre)}"/></div>
-              <div><label class="font-medium text-slate-600">Lugar / Estadio</label><input id="r_lugar" class="fld text-xs py-1" value="${esc(state.lugar)}"/></div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">📋 Datos Administrativos${isPart ? " (Resolución siempre editable)" : " <span class='font-normal text-slate-400'>(sin resolución: este evento no es partido)</span>"}</div>
-              ${isPart ? `<div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Resolución N°</label><input id="r_res_num" class="fld text-xs py-1" value="${esc(state.resolucion_num)}"/></div>
-                <div><label class="font-medium text-slate-600">Fecha Res.</label><input id="r_res_fecha" class="fld text-xs py-1" value="${esc(state.resolucion_fecha)}"/></div>
-              </div>
-              <div><label class="font-medium text-slate-600">Entidad Emisora</label><input id="r_res_entidad" class="fld text-xs py-1" value="${esc(state.resolucion_entidad)}"/></div>` : ""}
-              <div class="grid grid-cols-2 gap-2">
-                ${isPart ? `<div><label class="font-medium text-slate-600">Categoría</label><input id="r_cat" class="fld text-xs py-1" value="${esc(state.categoria)}"/></div>` : ""}
-                <div><label class="font-medium text-slate-600">Aforo</label><input id="r_aforo" class="fld text-xs py-1" value="${esc(state.aforo)}"/></div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Detec. Metales</label><input id="r_metales" class="fld text-xs py-1" value="${esc(state.detec_metales)}"/></div>
-                <div><label class="font-medium text-slate-600">Ambulancias 🚑</label><input id="r_amb" class="fld text-xs py-1" value="${esc(state.ambulancias)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🏢 Empresa de Seguridad</div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Nombre Empresa</label><input id="r_emp_nom" class="fld text-xs py-1" value="${esc(state.empresa_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">RUT Empresa</label><input id="r_emp_rut" class="fld text-xs py-1" value="${esc(state.empresa_rut)}"/></div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">DD.FF. N° <span class="font-normal text-slate-400">(Directiva de Funcionamiento)</span></label><input id="r_ddff_num" class="fld text-xs py-1" value="${esc(state.ddff_num)}"/></div>
-                <div><label class="font-medium text-slate-600">Fecha DD.FF.</label><input id="r_ddff_fecha" class="fld text-xs py-1" value="${esc(state.ddff_fecha)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">👥 Representantes</div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Rep. Legal</label><input id="r_rep_nom" class="fld text-xs py-1" value="${esc(state.rep_legal_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">RUT Rep. Legal</label><input id="r_rep_rut" class="fld text-xs py-1" value="${esc(state.rep_legal_rut)}"/></div>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Jefe Seguridad</label><input id="r_jefe_nom" class="fld text-xs py-1" value="${esc(state.jefe_seguridad_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">C/I Jefe Seg.</label><input id="r_jefe_rut" class="fld text-xs py-1" value="${esc(state.jefe_seguridad_rut)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">${guardiaIcon()} Personal de Seguridad</div>
-              <div class="grid grid-cols-3 gap-2">
-                <div><label class="font-medium text-slate-600">Total GG.SS.</label><input id="r_total_ggss" type="number" class="fld text-xs py-1" value="${state.total_ggss}"/></div>
-                <div><label class="font-medium text-slate-600">Hombres</label><input id="r_hombres" type="number" class="fld text-xs py-1" value="${state.hombres}"/></div>
-                <div><label class="font-medium text-slate-600">Mujeres</label><input id="r_mujeres" type="number" class="fld text-xs py-1" value="${state.mujeres}"/></div>
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div><label class="font-medium text-slate-600">Supervisores</label><input id="r_supervisores" class="fld text-xs py-1" value="${esc(state.supervisores)}"/></div>
-                <div><label class="font-medium text-slate-600">Jefe Seg. (Cant)</label><input id="r_jefe_cant" class="fld text-xs py-1" value="${esc(state.jefe_seguridad_cant)}"/></div>
-                <div><label class="font-medium text-slate-600">CCTV (Cant)</label><input id="r_cctv_cant" class="fld text-xs py-1" value="${esc(state.cctv_cant)}"/></div>
-              </div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🚔 Personal OS.10</div>
-              <div><label class="font-medium text-slate-600">Personal OS.10 a Cargo</label><input id="r_os10" class="fld text-xs py-1" value="${esc(state.personal_os10)}"/></div>
-              <div><label class="font-medium text-slate-600">Estado del Evento</label><input id="r_estado" class="fld text-xs py-1" value="${esc(state.estado)}"/></div>
-
-              <div class="font-semibold text-slate-800 text-xs text-indigo-700 pt-1">🎖️ Cuenta al Coronel <span class="font-normal text-slate-400">(formato narrativo)</span></div>
-              <div><label class="font-medium text-slate-600">S.O.M. a cargo</label><input id="r_som" class="fld text-xs py-1" value="${esc(state.som_nombre)}"/></div>
-              <div class="grid grid-cols-2 gap-2">
-                <div><label class="font-medium text-slate-600">Organizador (Empresa)</label><input id="r_org_nom" class="fld text-xs py-1" value="${esc(state.organizador_nombre)}"/></div>
-                <div><label class="font-medium text-slate-600">RUT Organizador</label><input id="r_org_rut" class="fld text-xs py-1" value="${esc(state.organizador_rut)}"/></div>
-              </div>
-              <div><label class="font-medium text-slate-600">Realizada en (recinto)</label><input id="r_venue" class="fld text-xs py-1" value="${esc(state.coronel_venue)}"/></div>
-              <div><label class="font-medium text-slate-600">Dirección</label><input id="r_direccion" class="fld text-xs py-1" value="${esc(state.coronel_direccion)}"/></div>
-            </div>
-          </details>
-
-          <div class="flex gap-2 pt-1">
-            <button id="m_close_report" class="btn btn-ghost flex-1">Cerrar</button>
-            <button id="m_save_report" class="btn btn-p flex-1 bg-slate-700 hover:bg-slate-800 text-white">💾 Guardar plantilla</button>
-          </div>
-        </div>
-      `);
-
-      const prev = $("#cuentaOS10Preview");
-      const updatePreview = () => {
-        state.fecha = $("#r_fecha").value.trim();
-        state.hora_inicio = $("#r_hora").value.trim();
-        state.partido_o_nombre = $("#r_partido").value.trim();
-        state.lugar = $("#r_lugar").value.trim();
-
-        const _resNum = $("#r_res_num"); if (_resNum) state.resolucion_num = _resNum.value.trim();
-        const _resFecha = $("#r_res_fecha"); if (_resFecha) state.resolucion_fecha = _resFecha.value.trim();
-        const _resEnt = $("#r_res_entidad"); if (_resEnt) state.resolucion_entidad = _resEnt.value.trim();
-        const _cat = $("#r_cat"); if (_cat) state.categoria = _cat.value.trim();
-        state.aforo = $("#r_aforo").value.trim();
-        state.detec_metales = $("#r_metales").value.trim();
-        state.ambulancias = $("#r_amb").value.trim();
-
-        state.empresa_nombre = $("#r_emp_nom").value.trim();
-        state.empresa_rut = $("#r_emp_rut").value.trim();
-        state.ddff_num = $("#r_ddff_num").value.trim();
-        state.ddff_fecha = $("#r_ddff_fecha").value.trim();
-
-        state.rep_legal_nombre = $("#r_rep_nom").value.trim();
-        state.rep_legal_rut = $("#r_rep_rut").value.trim();
-        state.jefe_seguridad_nombre = $("#r_jefe_nom").value.trim();
-        state.jefe_seguridad_rut = $("#r_jefe_rut").value.trim();
-
-        state.total_ggss = $("#r_total_ggss").value;
-        state.hombres = $("#r_hombres").value;
-        state.mujeres = $("#r_mujeres").value;
-        state.supervisores = $("#r_supervisores").value.trim();
-        state.jefe_seguridad_cant = $("#r_jefe_cant").value.trim();
-        state.cctv_cant = $("#r_cctv_cant").value.trim();
-
-        state.personal_os10 = $("#r_os10").value.trim();
-        state.estado = $("#r_estado").value.trim();
-
-        { const e = $("#r_som"); if (e) state.som_nombre = e.value.trim(); }
-        { const e = $("#r_org_nom"); if (e) state.organizador_nombre = e.value.trim(); }
-        { const e = $("#r_org_rut"); if (e) state.organizador_rut = e.value.trim(); }
-        { const e = $("#r_venue"); if (e) state.coronel_venue = e.value.trim(); }
-        { const e = $("#r_direccion"); if (e) state.coronel_direccion = e.value.trim(); }
-        state.formato = formatoInforme;
-
-        prev.value = buildText();
-      };
-
-      // Botones para alternar el formato del informe (estructurado / narrativo al Coronel).
-      const pintarToggle = () => {
-        const bE = $("#fmt_estructurado"), bC = $("#fmt_coronel");
-        const on = "bg-emerald-600 text-white", off = "btn-ghost";
-        if (bE) bE.className = "btn flex-1 py-2 text-xs font-bold rounded-xl " + (formatoInforme === "coronel" ? off : on);
-        if (bC) bC.className = "btn flex-1 py-2 text-xs font-bold rounded-xl " + (formatoInforme === "coronel" ? on : off);
-      };
-      { const bE = $("#fmt_estructurado"), bC = $("#fmt_coronel");
-        if (bE) bE.addEventListener("click", () => { formatoInforme = "estructurado"; pintarToggle(); updatePreview(); });
-        if (bC) bC.addEventListener("click", () => { formatoInforme = "coronel"; pintarToggle(); updatePreview(); });
-      }
-      pintarToggle();
-
-      prev.value = buildText();
-
-      const inputs = [
-        "r_fecha", "r_hora", "r_partido", "r_lugar", "r_res_num", "r_res_fecha", "r_res_entidad",
-        "r_cat", "r_aforo", "r_metales", "r_amb", "r_emp_nom", "r_emp_rut", "r_ddff_num", "r_ddff_fecha",
-        "r_rep_nom", "r_rep_rut", "r_jefe_nom", "r_jefe_rut", "r_total_ggss", "r_hombres", "r_mujeres",
-        "r_supervisores", "r_jefe_cant", "r_cctv_cant", "r_os10", "r_estado",
-        "r_som", "r_org_nom", "r_org_rut", "r_venue", "r_direccion"
-      ];
-      inputs.forEach(id => {
-        const el = $("#" + id);
-        if (el) el.addEventListener("input", updatePreview);
-      });
-
-      const guardarEstado = async () => {
-        updatePreview();
-        try {
-          await Data.updateEvento(ev.id, { reporte_os10: state });
-        } catch (e) { console.error("Error guardando plantilla de informe:", e); }
-      };
-
-      // --- INICIO: Lógica para Autocompletar con PDF ---
-      const pdfInput = $("#pdfUploadInput");
-      if (pdfInput) {
-        pdfInput.addEventListener("change", async (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-
-          const label = $("#pdfUploadLabel");
-          const originalLabelText = label.innerText;
-          label.innerText = "Procesando...";
-
-          try {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-            let fullText = "";
-
-            for (let i = 1; i <= pdf.numPages; i++) {
-              const page = await pdf.getPage(i);
-              const textContent = await page.getTextContent();
-              const pageText = textContent.items.map(item => item.str).join(" ");
-              fullText += pageText + " ";
-            }
-
-            // Normalizar el texto (quitar multiples espacios)
-            const text = fullText.replace(/\s+/g, ' ');
-
-            // Helper para convertir fecha larga a corta (DD/MM/YYYY)
-            function toShortDate(str) {
-              if (!str) return "";
-              const m = { 'enero': '01', 'febrero': '02', 'marzo': '03', 'abril': '04', 'mayo': '05', 'junio': '06', 'julio': '07', 'agosto': '08', 'septiembre': '09', 'octubre': '10', 'noviembre': '11', 'diciembre': '12' };
-              const regex = /(\d{1,2})\s*de\s*([a-zA-Z]+)\s*de\s*(\d{4})/i;
-              const match = str.match(regex);
-              if (match) {
-                const day = match[1].padStart(2, '0');
-                const month = m[match[2].toLowerCase()] || '01';
-                return `${day}/${month}/${match[3]}`;
-              }
-              return str;
-            }
-
-            // --- EXTRACCIÓN CON REGEX ---
-            const resMatch = text.match(/RESOLUCIÓN EXENTA N°\s*(\d+)/i);
-            if (resMatch && $("#r_res_num")) $("#r_res_num").value = resMatch[1].trim();
-
-            const fechaResMatch = text.match(/LA SERENA,?\s*(\d{1,2} de [a-zA-Z]+ de \d{4})/i) || text.match(/(\d{1,2} de [a-zA-Z]+ de \d{4})/i);
-            if (fechaResMatch && $("#r_res_fecha")) $("#r_res_fecha").value = toShortDate(fechaResMatch[1].trim());
-
-            // Detalles del evento (equipos, fecha, hora, lugar)
-            const eventoDetailsMatch = text.match(/equipos\s+([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?)\s*,\s*el d[ií]a\s+([a-zA-Z]+\s+\d{1,2}\s+de\s+[a-zA-Z]+\s+de\s+\d{4})\s+a las\s+(\d{1,2}[:.]\d{2})\s+horas.*?(?:en el\s+)?(Estadio\s+[A-Za-z\s]+)(?:.|\,)/i);
-            
-            if (eventoDetailsMatch) {
-              let equipos = eventoDetailsMatch[1].trim();
-              if (equipos.toLowerCase().includes("y")) {
-                equipos = equipos.replace(/\by\b/gi, "vs");
-              }
-              $("#r_partido").value = equipos;
-              $("#r_fecha").value = toShortDate(eventoDetailsMatch[2].trim());
-              $("#r_hora").value = eventoDetailsMatch[3].replace('.', ':').trim() + " hrs";
-              let lugar = eventoDetailsMatch[4].trim();
-              if (lugar.toLowerCase().includes("portada")) {
-                lugar = "Estadio La Portada La Serena";
-              } else if (lugar.toLowerCase().includes("sanchez") || lugar.toLowerCase().includes("sánchez") || lugar.toLowerCase().includes("rumoroso")) {
-                lugar = "Estadio Francisco Sanchez Rumoroso";
-              }
-              $("#r_lugar").value = lugar;
-            } else {
-              // Fallbacks genéricos para cualquier equipo
-              const partidoMatch = text.match(/Autoriza partido.*?indica\s+([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?\s+v\/s\s+[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?)RESOLUCIÓN/i) || text.match(/([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?\s+v\/s\s+[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+?)(?:,|$|el d[ií]a)/i);
-              if (partidoMatch) {
-                let eq = partidoMatch[1].trim();
-                $("#r_partido").value = eq;
-              }
-
-              const fechaMatch = text.match(/el d[ií]a\s*([a-zA-Z]+\s*\d{1,2}\s*de\s*[a-zA-Z]+\s*de\s*\d{4})/i);
-              if (fechaMatch) $("#r_fecha").value = toShortDate(fechaMatch[1].trim());
-
-              const horaMatch = text.match(/a las\s*(\d{1,2}[:.]\d{2})\s*horas/i);
-              if (horaMatch) $("#r_hora").value = horaMatch[1].replace('.', ':').trim() + " hrs";
-
-              const lugarMatch = text.match(/(Estadio\s+[A-Za-z\s]+)(?:.|\,)/i);
-              if (lugarMatch) {
-                let lugar = lugarMatch[1].trim();
-                if (lugar.toLowerCase().includes("portada")) lugar = "Estadio La Portada La Serena";
-                else if (lugar.toLowerCase().includes("sanchez") || lugar.toLowerCase().includes("sánchez") || lugar.toLowerCase().includes("rumoroso")) lugar = "Estadio Francisco Sanchez Rumoroso";
-                $("#r_lugar").value = lugar;
-              }
-            }
-
-            const catMatch = text.match(/Categoría\s*([A-Z])/i);
-            if (catMatch && $("#r_cat")) $("#r_cat").value = "Cat. " + catMatch[1];
-
-            const aforoMatch = text.match(/aforo autorizado.*?es de\s*([0-9.]+)\s*personas/i);
-            if (aforoMatch) $("#r_aforo").value = aforoMatch[1] + " personas";
-
-            const ambMatch = text.match(/([0-9]+)\s*ambulancia/i);
-            if (ambMatch) $("#r_amb").value = ambMatch[1];
-
-            const metalesMatch = text.match(/([0-9]+)\s*detectores de metales/i);
-            if (metalesMatch) $("#r_metales").value = metalesMatch[1];
-
-            const jefeMatch = text.match(/Jefe de Seguridad.*?a don\s*([A-Za-zñÑáéíóúÁÉÍÓÚ\s]+),?\s*RUN\s*N°\s*([0-9.-]+)/i);
-            if (jefeMatch) {
-              $("#r_jefe_nom").value = jefeMatch[1].trim();
-              $("#r_jefe_rut").value = jefeMatch[2].trim();
-            }
-
-            updatePreview();
-            toast("¡Datos del PDF extraídos exitosamente!", true);
-          } catch (err) {
-            console.error("Error al procesar el PDF:", err);
-            toast("Error al leer el PDF. Asegúrate de que sea un archivo válido.", false);
-          } finally {
-            label.innerText = "¡Completado!";
-            setTimeout(() => { label.innerText = originalLabelText; }, 3000);
-            pdfInput.value = "";
-          }
-        });
-      }
-      // --- FIN: Lógica para Autocompletar con PDF ---
-
-      $("#m_close_report").addEventListener("click", closeModal);
-      $("#m_save_report").addEventListener("click", async () => {
-        await guardarEstado();
-        toast("Plantilla de informe guardada para este evento.");
-      });
-
-      $("#cpCuentaOS10").addEventListener("click", async () => {
-        updatePreview();
-        const textToCopy = prev.value;
-        try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(textToCopy);
-          } else {
-            prev.select();
-            document.execCommand("copy");
-          }
-          await guardarEstado();
-          toast("¡Informe Cuenta O.S.10 copiado al portapapeles! Listo para pegar en WhatsApp.", true, 4000);
-        } catch (err) {
-          prev.select();
-          document.execCommand("copy");
-          toast("¡Informe copiado al portapapeles!", true);
-        }
-      });
     }
 
     /* ---- Modales evento ---- */
@@ -9765,7 +9274,7 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
           </table>
         </div>
       </div>
-      <p class="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-2"><img src="images/logo-os10-original.webp" class="w-5 h-5 opacity-60" alt="">O.S.10 Coquimbo · Vista de solo lectura</p>
+      <p class="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-2"><img src="images/logo-original.webp" class="w-5 h-5 opacity-60" alt="">Vista de solo lectura</p>
     </div>`;
         // Paneles plegables con auto-repliegue a los 7 s (igual que el "Resumen" del admin).
         const autoRepliegue = (btnId, panelId, chevId, key) => {
@@ -9975,8 +9484,8 @@ ${isPart ? `* Resolución: ${state.resolucion_num} (${state.resolucion_fecha})
     /* ===== Semilla de demo (solo la primera vez en modo demo) ===== */
     async function seedDemo() {
       if (USING_SUPABASE) return;
-      if (localStorage.getItem("os10_seeded")) return;
-      localStorage.setItem("os10_seeded", "1");
+      if (localStorage.getItem("ce_seeded")) return;
+      localStorage.setItem("ce_seeded", "1");
       const e1 = await Local.createEvento({ nombre_evento: "Pampilla La Serena", empresa: "MAGATY", cantidad_esperada: 100, fecha_evento: "2026-09-18", slug: makeSlug("Pampilla La Serena", "MAGATY"), turno_horas: 12, turno_inicio: "08:00" });
       const e2 = await Local.createEvento({ nombre_evento: "Combo", empresa: "FONQUI", cantidad_esperada: 30, fecha_evento: "2026-09-19", slug: makeSlug("Combo", "FONQUI"), usa_turnos: false, turno_horas: 8, turno_inicio: "07:00" });
       await Local.createEvento({ nombre_evento: "La Serena vs Huachipato", empresa: "MAGATY", cantidad_esperada: 40, fecha_evento: "2026-09-20", slug: makeSlug("La Serena vs Huachipato", "MAGATY"), tipo: "partido", partido: "La Serena vs Huachipato", usa_turnos: false });

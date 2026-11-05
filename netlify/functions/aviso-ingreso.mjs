@@ -9,7 +9,7 @@
 // Variables de entorno de Netlify (Site configuration → Environment variables). Nunca en el código:
 //   AVISO_TOKEN         clave compartida con el disparador de Supabase (texto largo al azar)
 //   AVISO_DESTINOS      correos que reciben el aviso, separados por coma
-//   GMAIL_USER          cuenta de Gmail que envía (ej. la del O.S.10)
+//   GMAIL_USER          cuenta de Gmail que envía (ej. la institucional)
 //   GMAIL_APP_PASSWORD  "contraseña de aplicación" de esa cuenta (no la contraseña normal)
 //
 // El correo no incluye datos personales de los guardias (ni RUT ni nombre): solo evento, turno y hora.
@@ -128,7 +128,7 @@ export default async (req) => {
     const etTurno = esHorario ? "Horario" : "Turno";
     const asunto = `🟢 Comenzaron los ingresos — ${ev.nombre_evento}${v.etiqueta ? " · " + (esHorario ? "Horario " + v.rango : v.etiqueta) : ""}`;
     const html = `<div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:auto;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
-  <div style="background:#0f5323;color:#fff;padding:14px 18px;font-weight:bold;font-size:16px">O.S.10 Coquimbo · Control de eventos</div>
+  <div style="background:#0f5323;color:#fff;padding:14px 18px;font-weight:bold;font-size:16px">Control de eventos</div>
   <div style="padding:18px;color:#0f172a;font-size:14px;line-height:1.5">
     <div style="font-size:17px;font-weight:bold;margin-bottom:6px">🟢 Comenzaron los ingresos</div>
     <div><b>Evento:</b> ${esc(ev.nombre_evento)}</div>
@@ -144,7 +144,7 @@ export default async (req) => {
     const texto = `Comenzaron los ingresos\nEvento: ${ev.nombre_evento}\nEmpresa: ${ev.empresa || ""}\n${turnoTxt ? etTurno + ": " + turnoTxt + "\n" : ""}${v.citacion ? "Citación guardias: " + v.citacion + "\n" : ""}Primer ingreso: ${fecha}, ${hora}\n${sitio ? sitio + "/" : ""}`;
 
     const tx = nodemailer.createTransport({ service: "gmail", auth: { user, pass } });
-    await tx.sendMail({ from: `"O.S.10 Coquimbo · Eventos" <${user}>`, to: destinos.join(", "), subject: asunto, text: texto, html });
+    await tx.sendMail({ from: `"Control de eventos" <${user}>`, to: destinos.join(", "), subject: asunto, text: texto, html });
     return json({ ok: true, enviado: true });
   } catch (e) {
     console.error("aviso-ingreso:", e && e.message);
